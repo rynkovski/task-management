@@ -3,7 +3,7 @@ import Button from "./ui/button";
 
 function Header() {
   return (
-    <header className="flex items-center justify-end gap-2 p-8 border-b border-t border-r border-zinc-400">
+    <header className="flex items-center justify-end gap-2 p-8 rounded-lg border border-zinc-400">
       <Button
         style={"bg-indigo-700/70"}
         text={"Add task"}

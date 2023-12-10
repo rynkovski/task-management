@@ -4,7 +4,7 @@ const boards = ["New board", "New board2", "New board3"];
 
 function Sidebar() {
   return (
-    <aside className="border border-zinc-400 p-8 my-8 w-1/3">
+    <aside className="border border-zinc-400 p-8 my-8 mx-4 rounded-lg w-1/3">
       <p className="text-xl font-bold mb-8 flex items-center gap-2">
         <CheckSquare color="#6366f1" />
         kanban
