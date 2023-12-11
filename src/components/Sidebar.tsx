@@ -1,4 +1,4 @@
-import { CheckSquare, KanbanSquare, PlusSquare } from "lucide-react";
+import { CheckSquare, KanbanSquare, PlusSquare, Trash2 } from "lucide-react";
 
 const boards = ["New board", "New board2", "New board3"];
 
@@ -13,14 +13,15 @@ function Sidebar() {
       <ul className="mb-6">
         {boards.map((board, idx) => {
           return (
-            <li key={idx}>
-              <a
-                className="flex mb-2 hover:rounded-lg hover:bg-indigo-700 px-4 py-2 gap-2 active:bg-indigo-700"
-                href=""
-              >
+            <li
+              className="flex justify-between hover:bg-indigo-700 px-4 py-2 hover:rounded-lg"
+              key={idx}
+            >
+              <a className="flex gap-2" href="">
                 <KanbanSquare />
                 {board}
               </a>
+              <Trash2 className="cursor-pointer text-red-500" />
             </li>
           );
         })}
