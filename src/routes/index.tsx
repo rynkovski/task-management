@@ -11,13 +11,15 @@ export const Route = new FileRoute('/').createRoute({
 
 function IndexComponent() {
   return (
-    <Container p={8} centerContent>
-      <ChakraLink as={TanstackLink} to="/boards">
-        <Button>Go to boards</Button>
-      </ChakraLink>
+    <>
+      <Container p={8} centerContent>
+        <ChakraLink as={TanstackLink} to="/boards">
+          <Button>Go to boards</Button>
+        </ChakraLink>
 
-      <Outlet />
-    </Container>
+        <Outlet />
+      </Container>
+    </>
   );
 }
 
