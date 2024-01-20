@@ -13,12 +13,16 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@tanstack/react-query": "^5.17.19",
     "@tanstack/react-router": "^1.5.7",
     "@tanstack/router-devtools": "^1.5.7",
+    "firebase": "^10.7.2",
     "framer-motion": "^10.18.0",
     "lucide-react": "^0.294.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.49.3",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@tanstack/router-vite-plugin": "^1.5.7",

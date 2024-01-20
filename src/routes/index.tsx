@@ -13,8 +13,8 @@ function IndexComponent() {
   return (
     <>
       <Container p={8} centerContent>
-        <ChakraLink as={TanstackLink} to="/boards">
-          <Button>Go to boards</Button>
+        <ChakraLink as={TanstackLink} to="/login">
+          <Button>Go to login</Button>
         </ChakraLink>
 
         <Outlet />
