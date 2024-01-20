@@ -18,31 +18,45 @@ import {
 import { FileRoute, Link as TanstackLink } from "@tanstack/react-router";
 import { KanbanSquare } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-// import { useToast } from "@chakra-ui/react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useToast } from "@chakra-ui/react";
 
-export const Route = new FileRoute("/login").createRoute({
+type FormValues = {
+  email: string;
+  password: string;
+};
+
+export const Route = new FileRoute('/login').createRoute({
   component: LoginComponent,
 });
 
 function LoginComponent() {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-  // const toast = useToast();
+  const toast = useToast();
   const {
     handleSubmit,
-    login,
-    formState: { errors, isSubmitting },
-  } = useForm();
+    register,
+    formState: { isSubmitting },
+  } = useForm<FormValues>();
 
-  function onSubmit(values) {
-    return new Promise((resolve) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    return new Promise<void>((resolve) => {
       setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
+        console.log(data);
         resolve();
       }, 3000);
+
+      toast({
+        title: "Login succesful",
+        description: "You're being redirected",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
     });
-  }
+  };
+
   // async function onSubmit(data) {
   //   login(data)
   //     .then(() => {
@@ -78,13 +92,13 @@ function LoginComponent() {
         </CardHeader>
         <CardBody>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl isInvalid={errors.name}>
+            <FormControl>
               <FormLabel htmlFor="email">Email address</FormLabel>
               <Input
                 id="email"
                 type="email"
                 placeholder="Enter email"
-                {...login("email", {
+                {...register("email", {
                   required: "This is required",
                   minLength: {
                     value: 4,
@@ -92,9 +106,7 @@ function LoginComponent() {
                   },
                 })}
               />
-              <FormErrorMessage>
-                {errors.name && errors.name.message}
-              </FormErrorMessage>
+              <FormErrorMessage></FormErrorMessage>
               <FormLabel mt={2}>Password</FormLabel>
               <InputGroup size="md">
                 <Input
@@ -102,6 +114,13 @@ function LoginComponent() {
                   pr="4.5rem"
                   type={show ? "text" : "password"}
                   placeholder="Enter password"
+                  {...register("password", {
+                    required: "This is required",
+                    minLength: {
+                      value: 4,
+                      message: "Minimum length should be 4",
+                    },
+                  })}
                 />
                 <InputRightElement width="4.5rem">
                   <Button h="1.75rem" size="sm" onClick={handleClick}>
