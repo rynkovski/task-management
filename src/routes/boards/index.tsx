@@ -1,57 +1,89 @@
-import { Box, Center, Heading, Text, Wrap } from "@chakra-ui/react";
+import { Box, Center, Heading, Spinner, Text, Wrap } from "@chakra-ui/react";
 import { FileRoute, Outlet } from "@tanstack/react-router";
-
 import BoardsTopBar from "../../components/BoardsTopBar";
 import { Link as ChakraLink, WrapItem } from "@chakra-ui/react";
 import { Link as TanstackLink } from "@tanstack/react-router";
+
+import { useGetBoards } from "../../actions/get-boards";
+import { useEffect } from "react";
+
 export const Route = new FileRoute('/boards/').createRoute({
   component: BoardsIndexComponent,
 });
 
-const boardsMock = [
-  { id: "1", title: "board1", color: "red", createdAt: "20-01-2024" },
-  { id: "2", title: "board2", color: "blue", createdAt: "20-01-2024" },
-  { id: "3", title: "board3", color: "green", createdAt: "20-01-2024" },
-];
-
 function BoardsIndexComponent() {
+  const {
+    data: boardsData,
+    isLoading: isLoadingBoards,
+    refetch: refetchBoards,
+  } = useGetBoards();
+
+  useEffect(() => {
+    refetchBoards();
+  }, [boardsData]);
   return (
     <>
       <BoardsTopBar />
-      <Box as="main" px={12}>
-        <Heading mt={2}>Select Board</Heading>
-        {/* <Center>
-          <Text size="lg" as="b">
-            No boards. Create one!
-          </Text>
-        </Center> */}
-        <Wrap my={5} spacing={10}>
-          {boardsMock.map((board) => {
-            return (
-              <ChakraLink
-                textDecoration="none"
-                key={board.id}
-                as={TanstackLink}
-                to="/boards/$boardId"
-                params={{ boardId: { board } }}
-              >
-                <WrapItem>
-                  <Center
-                    borderRadius="lg"
-                    border="1px"
-                    borderColor={board.color}
-                    w={300}
-                    h={100}
-                    flexDirection="column"
-                  >
-                    <Heading size="md">{board.title}</Heading>
-                    <Text color="gray">Created at: {board.createdAt}</Text>
-                  </Center>
-                </WrapItem>
-              </ChakraLink>
-            );
-          })}
-        </Wrap>
+      <Box
+        as="main"
+        px={12}
+        flexDirection={{ base: "column", sm: "row" }}
+        alignItems={{ base: "center", sm: "start" }}
+      >
+        <Heading mt={4}>Select Board</Heading>
+        {isLoadingBoards ? (
+          <Spinner />
+        ) : (
+          <>
+            {boardsData ? (
+              <Wrap my={5} spacing={10}>
+                {boardsData.map((board) => {
+                  return (
+                    <ChakraLink
+                      textDecoration="none"
+                      key={board.id}
+                      as={TanstackLink}
+                      to="/boards/$boardId"
+                      params={{ boardId: `${board.id}` }}
+                    >
+                      <WrapItem>
+                        <Center
+                          borderRadius="lg"
+                          bg="blue.800"
+                          minW={250}
+                          h={100}
+                          flexDirection="column"
+                          shadow="md"
+                          position="relative"
+                        >
+                          <Box
+                            position="absolute"
+                            w={2}
+                            h={100}
+                            bg={board.data.color}
+                            roundedLeft={"lg"}
+                            left={0}
+                          ></Box>
+                          <Heading size="md">{board.data.title}</Heading>
+                          <Text color="gray">
+                            Created at: {board.createdAt}
+                          </Text>
+                        </Center>
+                      </WrapItem>
+                    </ChakraLink>
+                  );
+                })}
+              </Wrap>
+            ) : (
+              <Center>
+                <Text size="lg" as="b">
+                  No boards. Create one!
+                </Text>
+              </Center>
+            )}
+          </>
+        )}
+
         <Outlet />
       </Box>
     </>

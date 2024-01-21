@@ -14,19 +14,19 @@ function BoardTopBar() {
     <>
       <Flex
         as="header"
-        w="100%"
         shadow="large"
-        h={16}
         px={12}
+        py={4}
         sx={"justify-between"}
+        flexDirection={{ base: "column", sm: "row" }}
         gap={2}
-        bg="slateblue"
+        bg="blue.800"
         align="center"
         boxShadow="lg"
       >
         <Center gap={2}>
           <ChakraLink as={TanstackLink} to="/boards">
-            <ArrowLeftSquare />
+            <ArrowLeftSquare size={28} />
           </ChakraLink>
 
           <Text as="b">Board name</Text>

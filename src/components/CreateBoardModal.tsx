@@ -12,59 +12,122 @@ import {
   FormControl,
   FormLabel,
   RadioGroup,
-  HStack,
   Radio,
+  Stack,
+  useToast,
 } from "@chakra-ui/react";
 import { PlusSquare } from "lucide-react";
-// import { useState } from "react";
+import { Board } from "../types/types";
+import { addBoard } from "../actions/add-board";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useGetBoards } from "../actions/get-boards";
+
+const colors = [
+  "gray.300",
+  "red.300",
+  "orange.300",
+  "yellow.300",
+  "green.300",
+  "teal.300",
+  "blue.300",
+  "cyan.300",
+  "purple.300",
+  "pink.300",
+];
 
 function CreateBoardModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const [title, setTitle] = useState("");
-  // const [color, setColor] = useState("");
+  const toast = useToast();
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState,
+    formState: { isSubmitting },
+  } = useForm<Board>();
+  const { refetch: refetchBoards } = useGetBoards();
+
+  useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset();
+    }
+  }, [formState, reset]);
+
+  async function onSubmit(data: Board) {
+    addBoard(data)
+      .then(() => {
+        toast({
+          title: "Added succesfully",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: `Something wrong ${error}`,
+          description: "Try again later",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
+    onClose();
+    refetchBoards();
+  }
 
   return (
     <>
-      <Button onClick={onOpen} leftIcon={<PlusSquare />} colorScheme="teal">
+      <Button onClick={onOpen} leftIcon={<PlusSquare />} colorScheme="blue">
         Create board
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create board</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl isRequired>
-              <FormLabel>Board title:</FormLabel>
-              <Input placeholder="Board title" />
-            </FormControl>
-            <FormControl as="fieldset">
-              <FormLabel as="legend" py={2}>
-                Select color:
-              </FormLabel>
-              <RadioGroup defaultValue="blue">
-                <HStack spacing="24px">
-                  <Radio value="red" bg="red" colorScheme="red"></Radio>
-                  <Radio value="green" bg="green" colorScheme="green"></Radio>
-                  <Radio value="blue" bg="blue" colorScheme="blue"></Radio>
-                  <Radio
-                    value="yellow"
-                    bg="yellow"
-                    colorScheme="yellow"
-                  ></Radio>
-                </HStack>
-              </RadioGroup>
-            </FormControl>
-          </ModalBody>
+        <ModalContent mt={40} mx={2}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <ModalHeader>Create board</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl isRequired>
+                <FormLabel>Board title:</FormLabel>
+                <Input
+                  id="title"
+                  placeholder="Board title"
+                  {...register("title")}
+                />
+              </FormControl>
+              <FormControl as="fieldset">
+                <FormLabel as="legend" py={2}>
+                  Select color:
+                </FormLabel>
+                <RadioGroup id="color" defaultValue="blue">
+                  <Stack direction="row" wrap="wrap" spacing="24px">
+                    {colors.map((color) => {
+                      return (
+                        <Radio
+                          key={color}
+                          value={color}
+                          bg={color}
+                          colorScheme={color}
+                          {...register("color")}
+                        />
+                      );
+                    })}
+                  </Stack>
+                </RadioGroup>
+              </FormControl>
+            </ModalBody>
 
-          <ModalFooter>
-            <Button mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button colorScheme="teal" variant="outline">
-              Create
-            </Button>
-          </ModalFooter>
+            <ModalFooter>
+              <Button mr={3} onClick={onClose} variant="outline">
+                Close
+              </Button>
+              <Button colorScheme="blue" isLoading={isSubmitting} type="submit">
+                Create
+              </Button>
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </>

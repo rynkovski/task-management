@@ -15,16 +15,19 @@ import {
   Center,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import { FileRoute, Link as TanstackLink } from "@tanstack/react-router";
+import {
+  FileRoute,
+  Link as TanstackLink,
+  redirect,
+} from "@tanstack/react-router";
 import { KanbanSquare } from "lucide-react";
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useToast } from "@chakra-ui/react";
-
-type FormValues = {
-  email: string;
-  password: string;
-};
+import { LoginInput } from "../types/auth.types";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { setAuthorized } from "../stores/useAuthorizationStore";
 
 export const Route = new FileRoute('/login').createRoute({
   component: LoginComponent,
@@ -38,83 +41,51 @@ function LoginComponent() {
     handleSubmit,
     register,
     formState: { isSubmitting },
-  } = useForm<FormValues>();
+  } = useForm<LoginInput>();
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        console.log(data);
-        resolve();
-      }, 3000);
-
-      toast({
-        title: "Login succesful",
-        description: "You're being redirected",
-        status: "success",
-        duration: 9000,
-        isClosable: true,
+  async function onSubmit(data: LoginInput) {
+    signInWithEmailAndPassword(auth, data.email, data.password)
+      .then(() => {
+        setAuthorized(true);
+        redirect({ to: "/boards" });
+        toast({
+          title: "Login succesful",
+          description: "You're being redirected",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: `Something wrong ${error}`,
+          description: "Try again later",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
       });
-    });
-  };
-
-  // async function onSubmit(data) {
-  //   login(data)
-  //     .then(() => {
-  //       setAuthorized(true);
-  //       navigate("/");
-  //       toast({
-  //         title: "Login succesful",
-  //         description: "You're being redirected",
-  //         status: "success",
-  //         duration: 9000,
-  //         isClosable: true,
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       toast({
-  //         title: "Something wrong",
-  //         description: "Try again later",
-  //         status: "error",
-  //         duration: 9000,
-  //         isClosable: true,
-  //       });
-  //     });
-  // }
+  }
 
   return (
     <Container>
-      <Card align="center" maxW="md" mt={48}>
-        <CardHeader>
-          <Center gap={2}>
-            <Text as="b">ZenBoard</Text>
-            <KanbanSquare />
-          </Center>
-        </CardHeader>
-        <CardBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl>
-              <FormLabel htmlFor="email">Email address</FormLabel>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter email"
-                {...register("email", {
-                  required: "This is required",
-                  minLength: {
-                    value: 4,
-                    message: "Minimum length should be 4",
-                  },
-                })}
-              />
-              <FormErrorMessage></FormErrorMessage>
-              <FormLabel mt={2}>Password</FormLabel>
-              <InputGroup size="md">
+      <Center>
+        <Card align="center" mt={48} w="md">
+          <CardHeader w="100%">
+            <Center gap={2}>
+              <Text as="b">ZenBoard</Text>
+              <KanbanSquare />
+            </Center>
+          </CardHeader>
+          <CardBody w="100%" px={10}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <FormControl>
+                <FormLabel htmlFor="email">Email address</FormLabel>
                 <Input
-                  id="password"
-                  pr="4.5rem"
-                  type={show ? "text" : "password"}
-                  placeholder="Enter password"
-                  {...register("password", {
+                  id="email"
+                  type="email"
+                  placeholder="Enter email"
+                  {...register("email", {
                     required: "This is required",
                     minLength: {
                       value: 4,
@@ -122,31 +93,48 @@ function LoginComponent() {
                     },
                   })}
                 />
-                <InputRightElement width="4.5rem">
-                  <Button h="1.75rem" size="sm" onClick={handleClick}>
-                    {show ? "Hide" : "Show"}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-              <Button
-                colorScheme="blue"
-                mt={4}
-                w="100%"
-                isLoading={isSubmitting}
-                type="submit"
-              >
-                Login
-              </Button>
-            </FormControl>
-          </form>
-        </CardBody>
-        <CardFooter alignItems="center" gap={1}>
-          <Text>Don't have an account?</Text>
-          <ChakraLink as={TanstackLink} to="/register">
-            <Button variant="link">Register</Button>
-          </ChakraLink>
-        </CardFooter>
-      </Card>
+                <FormErrorMessage></FormErrorMessage>
+                <FormLabel mt={2}>Password</FormLabel>
+                <InputGroup size="md">
+                  <Input
+                    id="password"
+                    pr="4.5rem"
+                    type={show ? "text" : "password"}
+                    placeholder="Enter password"
+                    {...register("password", {
+                      required: "This is required",
+                      minLength: {
+                        value: 4,
+                        message: "Minimum length should be 4",
+                      },
+                    })}
+                  />
+                  <InputRightElement width="4.5rem">
+                    <Button h="1.75rem" size="sm" onClick={handleClick}>
+                      {show ? "Hide" : "Show"}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+                <Button
+                  colorScheme="blue"
+                  mt={4}
+                  w="100%"
+                  isLoading={isSubmitting}
+                  type="submit"
+                >
+                  Login
+                </Button>
+              </FormControl>
+            </form>
+          </CardBody>
+          <CardFooter alignItems="center" gap={1}>
+            <Text>Don't have an account?</Text>
+            <ChakraLink as={TanstackLink} to="/register">
+              <Button variant="link">Sign up</Button>
+            </ChakraLink>
+          </CardFooter>
+        </Card>
+      </Center>
     </Container>
   );
 }

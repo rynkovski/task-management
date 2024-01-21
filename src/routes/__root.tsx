@@ -1,11 +1,24 @@
 import { Outlet, RootRoute } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
+import { auth } from "../firebase";
+import { setAuthorized } from "../stores/useAuthorizationStore";
 
 export const Route = new RootRoute({
-  component: () => (
+  component: RootComponent,
+});
+
+function RootComponent() {
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setAuthorized(!!user);
+    });
+    return () => unsub();
+  }, []);
+
+  return (
     <>
       <Outlet />
-      <TanStackRouterDevtools />
     </>
-  ),
-});
+  );
+}

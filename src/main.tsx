@@ -1,6 +1,11 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, Router } from "@tanstack/react-router";
+import {
+  RouterProvider,
+  Router,
+  NotFoundRoute,
+  RootRoute,
+} from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import theme from "./theme";

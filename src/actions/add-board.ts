@@ -1,13 +1,20 @@
-// import { collection, addDoc } from "firebase/firestore";
-// import { db } from "../firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase";
+import { Board } from "../types/types";
+import { getAuth } from "firebase/auth";
 
-// try {
-//   const docRef = await addDoc(collection(db, "boards"), {
-//     title: "Ada",
-//     last: "Lovelace",
-//     born: 1815,
-//   });
-//   console.log("Document written with ID: ", docRef.id);
-// } catch (e) {
-//   console.error("Error adding document: ", e);
-// }
+export async function addBoard({ title, color }: Board) {
+  const {
+    currentUser: { uid },
+  }: any = getAuth();
+  const boardsColRef = collection(db, `users/${uid}/boards`);
+  try {
+    await addDoc(boardsColRef, {
+      title,
+      color,
+      createdAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
