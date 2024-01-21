@@ -9,6 +9,8 @@ import {
 import { KanbanSquare } from "lucide-react";
 import { Link as TanstackLink } from "@tanstack/react-router";
 import CreateBoardModal from "./CreateBoardModal";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 function BoardsTopBar() {
   return (
@@ -32,7 +34,11 @@ function BoardsTopBar() {
       <Spacer />
       <CreateBoardModal />
       <ChakraLink as={TanstackLink} to="/login">
-        <Button colorScheme="red" variant="outline">
+        <Button
+          onClick={() => signOut(auth)}
+          colorScheme="red"
+          variant="outline"
+        >
           Log out
         </Button>
       </ChakraLink>

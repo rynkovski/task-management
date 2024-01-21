@@ -16,7 +16,7 @@ export const getBoards = async () => {
       data: doc.data(),
       createdAt: doc.data().createdAt.toDate().toLocaleDateString(),
     }));
-
+    console.log(boards);
     return boards;
   } catch (error) {
     console.error(error);
@@ -30,6 +30,6 @@ export const useGetBoards = () => {
     queryFn: queryFN,
     refetchOnWindowFocus: false,
     retry: false,
-    enabled: false,
+    enabled: true,
   });
 };

@@ -5,22 +5,16 @@ import { Link as ChakraLink, WrapItem } from "@chakra-ui/react";
 import { Link as TanstackLink } from "@tanstack/react-router";
 
 import { useGetBoards } from "../../actions/get-boards";
-import { useEffect } from "react";
 
 export const Route = new FileRoute('/boards/').createRoute({
   component: BoardsIndexComponent,
 });
 
 function BoardsIndexComponent() {
-  const {
-    data: boardsData,
-    isLoading: isLoadingBoards,
-    refetch: refetchBoards,
-  } = useGetBoards();
+  const { data: boardsData, isLoading: isLoadingBoards } = useGetBoards();
 
-  useEffect(() => {
-    refetchBoards();
-  }, [boardsData]);
+  console.log(boardsData);
+
   return (
     <>
       <BoardsTopBar />
@@ -44,7 +38,11 @@ function BoardsIndexComponent() {
                       key={board.id}
                       as={TanstackLink}
                       to="/boards/$boardId"
-                      params={{ boardId: `${board.id}` }}
+                      params={{
+                        boardId: `${board.id}`,
+                        boardTitle: `${board.data.title}`,
+                        boardColor: `${board.data.color}`,
+                      }}
                     >
                       <WrapItem>
                         <Center

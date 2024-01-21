@@ -8,8 +8,9 @@ import {
 } from "@chakra-ui/react";
 import { ArrowLeftSquare, Trash2 } from "lucide-react";
 import { Link as TanstackLink } from "@tanstack/react-router";
+import { Board } from "../types/types";
 
-function BoardTopBar() {
+function BoardTopBar({ title, color }: Board) {
   return (
     <>
       <Flex
@@ -20,7 +21,7 @@ function BoardTopBar() {
         sx={"justify-between"}
         flexDirection={{ base: "column", sm: "row" }}
         gap={2}
-        bg="blue.800"
+        bg={color}
         align="center"
         boxShadow="lg"
       >
@@ -29,7 +30,7 @@ function BoardTopBar() {
             <ArrowLeftSquare size={28} />
           </ChakraLink>
 
-          <Text as="b">Board name</Text>
+          <Text as="b">{title}</Text>
         </Center>
 
         <Spacer />

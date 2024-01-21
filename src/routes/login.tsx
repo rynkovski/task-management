@@ -18,7 +18,7 @@ import {
 import {
   FileRoute,
   Link as TanstackLink,
-  redirect,
+  useRouter,
 } from "@tanstack/react-router";
 import { KanbanSquare } from "lucide-react";
 import { useState } from "react";
@@ -42,12 +42,13 @@ function LoginComponent() {
     register,
     formState: { isSubmitting },
   } = useForm<LoginInput>();
+  const router = useRouter();
 
   async function onSubmit(data: LoginInput) {
     signInWithEmailAndPassword(auth, data.email, data.password)
       .then(() => {
         setAuthorized(true);
-        redirect({ to: "/boards" });
+        router.invalidate();
         toast({
           title: "Login succesful",
           description: "You're being redirected",

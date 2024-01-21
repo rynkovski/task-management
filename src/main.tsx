@@ -1,17 +1,25 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import {
-  RouterProvider,
-  Router,
-  NotFoundRoute,
-  RootRoute,
-} from "@tanstack/react-router";
+import { RouterProvider, Router, ErrorComponent } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
-import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import { ChakraProvider, ColorModeScript, Spinner } from "@chakra-ui/react";
 import theme from "./theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const router = new Router({ routeTree });
+const router = new Router({
+  routeTree,
+  defaultPendingComponent: () => (
+    <div className={`p-2 text-2xl`}>
+      <Spinner />
+    </div>
+  ),
+  defaultErrorComponent: ({ error }) => <ErrorComponent error={error} />,
+  context: {
+    auth: undefined!, // We'll inject this when we render
+  },
+  defaultPreload: "intent",
+});
+
 const queryClient = new QueryClient();
 
 declare module "@tanstack/react-router" {

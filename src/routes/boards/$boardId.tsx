@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { FileRoute } from "@tanstack/react-router";
 import BoardTopBar from "../../components/BoardTopBar";
+import SectionCard from "../../components/SectionCard";
 
 export const Route = new FileRoute('/boards/$boardId').createRoute({
   // In a loader
@@ -11,11 +12,12 @@ export const Route = new FileRoute('/boards/$boardId').createRoute({
 
 function BoardComponent() {
   const { boardId } = Route.useParams();
+
   return (
     <>
-      <BoardTopBar />
+      <BoardTopBar title={boardId} color={"blue.800"} />
       <Box as="main" px={12}>
-        Board ID: {boardId}
+        <SectionCard />
       </Box>
     </>
   );
