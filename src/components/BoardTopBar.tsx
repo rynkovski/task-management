@@ -1,14 +1,15 @@
 import {
-  Button,
   Center,
   Flex,
   Spacer,
   Text,
   Link as ChakraLink,
+  Box,
 } from "@chakra-ui/react";
-import { ArrowLeftSquare, Trash2 } from "lucide-react";
+import { ArrowLeftSquare } from "lucide-react";
 import { Link as TanstackLink } from "@tanstack/react-router";
 import { Board } from "../types/types";
+import DeleteBoardModal from "../actions/delete-board";
 
 function BoardTopBar({ title, color }: Board) {
   return (
@@ -21,9 +22,10 @@ function BoardTopBar({ title, color }: Board) {
         sx={"justify-between"}
         flexDirection={{ base: "column", sm: "row" }}
         gap={2}
-        bg={color}
+        bg={"blue.800"}
         align="center"
         boxShadow="lg"
+        position={"relative"}
       >
         <Center gap={2}>
           <ChakraLink as={TanstackLink} to="/boards">
@@ -32,12 +34,16 @@ function BoardTopBar({ title, color }: Board) {
 
           <Text as="b">{title}</Text>
         </Center>
-
+        <Box
+          position={"absolute"}
+          bg={color}
+          w={"100%"}
+          h={1}
+          left={0}
+          top={"68px"}
+        />
         <Spacer />
-
-        <Button colorScheme="red" variant="outline">
-          <Trash2 />
-        </Button>
+        <DeleteBoardModal />
       </Flex>
     </>
   );

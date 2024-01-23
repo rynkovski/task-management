@@ -1,10 +1,11 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, Router, ErrorComponent } from "@tanstack/react-router";
+import { Router, ErrorComponent } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { ChakraProvider, ColorModeScript, Spinner } from "@chakra-ui/react";
 import theme from "./theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import App from "./App";
 
 const router = new Router({
   routeTree,
@@ -37,7 +38,7 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
           <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-          <RouterProvider router={router} />
+          <App />
         </ChakraProvider>
       </QueryClientProvider>
     </StrictMode>

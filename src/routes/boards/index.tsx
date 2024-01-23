@@ -1,5 +1,5 @@
 import { Box, Center, Heading, Spinner, Text, Wrap } from "@chakra-ui/react";
-import { FileRoute, Outlet } from "@tanstack/react-router";
+import { FileRoute, Outlet, redirect } from "@tanstack/react-router";
 import BoardsTopBar from "../../components/BoardsTopBar";
 import { Link as ChakraLink, WrapItem } from "@chakra-ui/react";
 import { Link as TanstackLink } from "@tanstack/react-router";
@@ -7,13 +7,21 @@ import { Link as TanstackLink } from "@tanstack/react-router";
 import { useGetBoards } from "../../actions/get-boards";
 
 export const Route = new FileRoute('/boards/').createRoute({
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth) {
+      throw redirect({
+        to: "/login",
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
   component: BoardsIndexComponent,
 });
 
 function BoardsIndexComponent() {
   const { data: boardsData, isLoading: isLoadingBoards } = useGetBoards();
-
-  console.log(boardsData);
 
   return (
     <>
@@ -40,8 +48,6 @@ function BoardsIndexComponent() {
                       to="/boards/$boardId"
                       params={{
                         boardId: `${board.id}`,
-                        boardTitle: `${board.data.title}`,
-                        boardColor: `${board.data.color}`,
                       }}
                     >
                       <WrapItem>

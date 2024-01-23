@@ -1,24 +1,27 @@
-import { Outlet, RootRoute } from "@tanstack/react-router";
+import { Outlet, rootRouteWithContext } from "@tanstack/react-router";
 import { onAuthStateChanged } from "firebase/auth";
-import { useEffect } from "react";
 import { auth } from "../firebase";
 import { setAuthorized } from "../stores/useAuthorizationStore";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
-export const Route = new RootRoute({
+interface MyRouterContext {
+  // The ReturnType of your useAuth hook or the value of your AuthContext
+  auth: boolean;
+}
+
+export const Route = rootRouteWithContext<MyRouterContext>()({
+  beforeLoad: () =>
+    onAuthStateChanged(auth, (user) => {
+      setAuthorized(!!user);
+    }),
   component: RootComponent,
 });
 
 function RootComponent() {
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      setAuthorized(!!user);
-    });
-    return () => unsub();
-  }, []);
-
   return (
     <>
       <Outlet />
+      <TanStackRouterDevtools />
     </>
   );
 }

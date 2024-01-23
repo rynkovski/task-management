@@ -3,3 +3,7 @@ export type Board = {
   color: string;
   //   createdAt: string;
 };
+
+export type TaskCard = {
+  title: string;
+};

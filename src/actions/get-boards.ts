@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { db } from "../firebase";
-import { getAuth } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 export const getBoards = async () => {
   const {
@@ -16,7 +16,7 @@ export const getBoards = async () => {
       data: doc.data(),
       createdAt: doc.data().createdAt.toDate().toLocaleDateString(),
     }));
-    console.log(boards);
+
     return boards;
   } catch (error) {
     console.error(error);

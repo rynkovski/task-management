@@ -18,7 +18,7 @@ import {
 import {
   FileRoute,
   Link as TanstackLink,
-  useRouter,
+  useNavigate,
 } from "@tanstack/react-router";
 import { KanbanSquare } from "lucide-react";
 import { useState } from "react";
@@ -27,7 +27,6 @@ import { useToast } from "@chakra-ui/react";
 import { LoginInput } from "../types/auth.types";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { setAuthorized } from "../stores/useAuthorizationStore";
 
 export const Route = new FileRoute('/login').createRoute({
   component: LoginComponent,
@@ -36,19 +35,21 @@ export const Route = new FileRoute('/login').createRoute({
 function LoginComponent() {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
+
+  const navigate = useNavigate();
   const toast = useToast();
   const {
     handleSubmit,
     register,
     formState: { isSubmitting },
   } = useForm<LoginInput>();
-  const router = useRouter();
 
   async function onSubmit(data: LoginInput) {
     signInWithEmailAndPassword(auth, data.email, data.password)
-      .then(() => {
-        setAuthorized(true);
-        router.invalidate();
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+        navigate({ to: "/boards" });
         toast({
           title: "Login succesful",
           description: "You're being redirected",
@@ -57,9 +58,9 @@ function LoginComponent() {
           isClosable: true,
         });
       })
-      .catch((error) => {
+      .catch(() => {
         toast({
-          title: `Something wrong ${error}`,
+          title: `Something wrong`,
           description: "Try again later",
           status: "error",
           duration: 9000,
