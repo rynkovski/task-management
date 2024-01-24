@@ -6,4 +6,10 @@ export type Board = {
 
 export type TaskCard = {
   title: string;
+  boardId: string;
+  cardId: string;
+};
+
+export type BoardId = {
+  id: string;
 };

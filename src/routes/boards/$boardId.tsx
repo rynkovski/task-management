@@ -31,7 +31,7 @@ function BoardComponent() {
     <>
       <BoardTopBar title={title} color={color} />
       <Box as="main" px={12}>
-        <TaskSection />
+        <TaskSection id={boardId} />
       </Box>
     </>
   );

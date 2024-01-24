@@ -1,16 +1,32 @@
 import {
   Button,
   GridItem,
+  IconButton,
   Input,
   InputGroup,
+  InputRightElement,
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { MoreVertical, Pencil, Trash2, X } from "lucide-react";
+import { MoreVertical, Pencil, PlusSquare, Trash2, X } from "lucide-react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import TaskItem from "./TaskItem";
+// import { addTask } from "../actions/add-task";
 
-function TaskCard() {
+const mockTasks = ["new", "test", "krzysiem"];
+
+type TaskCard = {
+  title: string;
+  boardId: string;
+  cardId: string;
+};
+
+function TaskCard({ title, boardId, cardId }: TaskCard) {
+  const handleTaskSubmit = () => {
+    console.log({ title, boardId, cardId });
+    // addTask({ title, boardId, cardId });
+  };
+
   return (
     <>
       <GridItem w="xs" mt={4}>
@@ -21,7 +37,7 @@ function TaskCard() {
             justifyContent="space-between"
           >
             <Text ml={1} as="b">
-              Todo
+              {title}
             </Text>
             <Menu>
               {({ isOpen }) => (
@@ -44,9 +60,23 @@ function TaskCard() {
             </Menu>
           </Stack>
           <Stack>
-            <TaskItem />
+            {mockTasks.map((task) => {
+              return <TaskItem key={task} name={task} />;
+            })}
             <InputGroup>
-              <Input variant="filled" placeholder="Add task..." />
+              <Input
+                variant="filled"
+                placeholder="Add task..."
+                onSubmit={handleTaskSubmit}
+              />
+              <InputRightElement>
+                <IconButton
+                  colorScheme="blue"
+                  aria-label="Search database"
+                  icon={<PlusSquare />}
+                  type="submit"
+                />
+              </InputRightElement>
             </InputGroup>
           </Stack>
         </Stack>

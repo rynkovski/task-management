@@ -2,7 +2,11 @@ import { Checkbox, Flex, IconButton, Text } from "@chakra-ui/react";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 
-function TaskItem() {
+type Task = {
+  name: string;
+};
+
+function TaskItem(name: Task) {
   const [toggleItem, setToggleItem] = useState("none");
 
   const handleChange = (e: any) => {
@@ -14,8 +18,10 @@ function TaskItem() {
   return (
     <>
       <Flex alignItems={"center"} justifyContent={"space-between"}>
-        <Checkbox onChange={handleChange} />
-        <Text decoration={toggleItem}>Lorem ipsum dolor sit amet</Text>
+        <Flex gap={2}>
+          <Checkbox onChange={handleChange} />
+          <Text decoration={toggleItem}>{name.name}</Text>
+        </Flex>
         <IconButton
           colorScheme="red"
           variant={"ghost"}

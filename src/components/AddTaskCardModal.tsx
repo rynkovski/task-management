@@ -16,8 +16,10 @@ import { PlusSquare } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { TaskCard } from "../types/types";
+import { addTaskCard } from "../actions/add-task-card";
+import { getTaskCards } from "../actions/get-task-cards";
 
-function AddTaskCardModal() {
+function AddTaskCardModal({ id }: any) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   //   const toast = useToast();
   const {
@@ -35,8 +37,7 @@ function AddTaskCardModal() {
   }, [formState, reset]);
 
   async function onSubmit(data: TaskCard) {
-    console.log(data);
-    // addBoard(data)
+    addTaskCard(data, id);
     //   .then(() => {
     //     toast({
     //       title: "Added succesfully",
@@ -55,7 +56,7 @@ function AddTaskCardModal() {
     //     });
     //   });
     onClose();
-    // refetchBoards();
+    getTaskCards(id);
   }
   return (
     <>
