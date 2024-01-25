@@ -11,17 +11,23 @@ import {
   FormControl,
   FormLabel,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { PlusSquare } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { TaskCard } from "../types/types";
 import { addTaskCard } from "../actions/add-task-card";
-import { getTaskCards } from "../actions/get-task-cards";
 
-function AddTaskCardModal({ id }: any) {
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useBoardIdContext } from "./context";
+
+function AddTaskCardModal() {
+  const queryClient = useQueryClient();
+  const boardId = useBoardIdContext();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
-  //   const toast = useToast();
+  const toast = useToast();
   const {
     handleSubmit,
     register,
@@ -36,27 +42,34 @@ function AddTaskCardModal({ id }: any) {
     }
   }, [formState, reset]);
 
+  const { mutateAsync: addTaskCardMutation } = useMutation({
+    mutationFn: addTaskCard,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["task-cards"] });
+    },
+  });
+
   async function onSubmit(data: TaskCard) {
-    addTaskCard(data, id);
-    //   .then(() => {
-    //     toast({
-    //       title: "Added succesfully",
-    //       status: "success",
-    //       duration: 9000,
-    //       isClosable: true,
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     toast({
-    //       title: `Something wrong ${error}`,
-    //       description: "Try again later",
-    //       status: "error",
-    //       duration: 9000,
-    //       isClosable: true,
-    //     });
-    //   });
+    const submitData = { ...data, boardId };
+    await addTaskCardMutation(submitData)
+      .then(() => {
+        toast({
+          title: "Added succesfully",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: `Something wrong ${error}`,
+          description: "Try again later",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      });
     onClose();
-    getTaskCards(id);
   }
   return (
     <>

@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { KanbanSquare } from "lucide-react";
 import { Link as TanstackLink } from "@tanstack/react-router";
-import CreateBoardModal from "./CreateBoardModal";
+import CreateBoardModal from "./AddBoardModal";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 

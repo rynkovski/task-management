@@ -25,7 +25,7 @@ async function deleteBoard({ BoardId }: any) {
   }
 }
 
-export default function DeleteBoardModal(id: any) {
+export default function DeleteBoardModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
 

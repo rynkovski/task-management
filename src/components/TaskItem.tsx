@@ -4,6 +4,7 @@ import { useState } from "react";
 
 type Task = {
   name: string;
+  completed: boolean;
 };
 
 function TaskItem(name: Task) {

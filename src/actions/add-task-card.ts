@@ -1,15 +1,20 @@
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { TaskCard } from "../types/types";
+
 import { getAuth } from "firebase/auth";
 
-export async function addTaskCard({ title }: TaskCard, { id }: any) {
+type TaskCardProps = {
+  title: string;
+  boardId: string;
+};
+
+export async function addTaskCard({ title, boardId }: TaskCardProps) {
   const {
     currentUser: { uid },
   }: any = getAuth();
   const sectionCardsColRef = collection(
     db,
-    `users/${uid}/boards/${id}/sectionCards/`
+    `users/${uid}/boards/${boardId}/sectionCards/`
   );
   try {
     await addDoc(sectionCardsColRef, {

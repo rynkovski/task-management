@@ -30,6 +30,5 @@ export const useGetBoards = () => {
     queryFn: queryFN,
     refetchOnWindowFocus: false,
     retry: false,
-    enabled: true,
   });
 };

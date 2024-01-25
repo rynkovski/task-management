@@ -3,6 +3,7 @@ import { FileRoute } from "@tanstack/react-router";
 import BoardTopBar from "../../components/BoardTopBar";
 import TaskSection from "../../components/TaskSection";
 import { useGetBoards } from "../../actions/get-boards";
+import { BoardContext } from "../../components/context";
 
 export const Route = new FileRoute('/boards/$boardId').createRoute({
   // In a loader
@@ -31,7 +32,9 @@ function BoardComponent() {
     <>
       <BoardTopBar title={title} color={color} />
       <Box as="main" px={12}>
-        <TaskSection id={boardId} />
+        <BoardContext.Provider value={boardId}>
+          <TaskSection />
+        </BoardContext.Provider>
       </Box>
     </>
   );

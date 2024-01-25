@@ -2,9 +2,11 @@ import { Grid, GridItem } from "@chakra-ui/react";
 import TaskCard from "./TaskCard";
 import AddTaskCardModal from "./AddTaskCardModal";
 import { useGetTaskCards } from "../actions/get-task-cards";
+import { useBoardIdContext } from "./context";
 
-function TaskSection(id: any) {
-  const { data: taskCardsData } = useGetTaskCards(id);
+function TaskSection() {
+  const boardId = useBoardIdContext();
+  const { data: taskCardsData } = useGetTaskCards(boardId);
 
   return (
     <>
@@ -15,7 +17,6 @@ function TaskSection(id: any) {
               <TaskCard
                 key={card.id}
                 title={card.data.title}
-                boardId={id}
                 cardId={card.id}
               />
             );
@@ -23,7 +24,7 @@ function TaskSection(id: any) {
         </>
 
         <GridItem w="xs" mt={10}>
-          <AddTaskCardModal id={id} />
+          <AddTaskCardModal />
         </GridItem>
       </Grid>
     </>

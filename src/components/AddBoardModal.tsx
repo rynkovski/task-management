@@ -21,7 +21,8 @@ import { Board } from "../types/types";
 import { addBoard } from "../actions/add-board";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
-import { useGetBoards } from "../actions/get-boards";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const colors = [
   "gray.300",
@@ -37,6 +38,7 @@ const colors = [
 ];
 
 function CreateBoardModal() {
+  const queryClient = useQueryClient();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const {
@@ -46,7 +48,13 @@ function CreateBoardModal() {
     formState,
     formState: { isSubmitting },
   } = useForm<Board>();
-  const { refetch: refetchBoards } = useGetBoards();
+
+  const { mutateAsync: addBoardMutation } = useMutation({
+    mutationFn: addBoard,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["boards"] });
+    },
+  });
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
@@ -55,7 +63,7 @@ function CreateBoardModal() {
   }, [formState, reset]);
 
   async function onSubmit(data: Board) {
-    addBoard(data)
+    await addBoardMutation(data)
       .then(() => {
         toast({
           title: "Added succesfully",
@@ -74,7 +82,6 @@ function CreateBoardModal() {
         });
       });
     onClose();
-    refetchBoards();
   }
 
   return (

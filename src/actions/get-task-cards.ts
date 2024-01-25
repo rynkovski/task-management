@@ -3,13 +3,13 @@ import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
-export const getTaskCards = async ({ id }: any) => {
+export const getTaskCards = async (boardId: string) => {
   const {
     currentUser: { uid },
   }: any = getAuth();
   const sectionCardsColRef = collection(
     db,
-    `users/${uid}/boards/${id}/sectionCards/`
+    `users/${uid}/boards/${boardId}/sectionCards/`
   );
 
   try {
@@ -25,13 +25,12 @@ export const getTaskCards = async ({ id }: any) => {
   }
 };
 
-export const useGetTaskCards = (id: any) => {
-  const queryFN = () => getTaskCards(id);
+export const useGetTaskCards = (boardId: string) => {
+  const queryFN = () => getTaskCards(boardId);
   return useQuery({
     queryKey: ["task-cards"],
     queryFn: queryFN,
     refetchOnWindowFocus: false,
     retry: false,
-    enabled: true,
   });
 };

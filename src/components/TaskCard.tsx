@@ -11,20 +11,14 @@ import {
 import { MoreVertical, Pencil, PlusSquare, Trash2, X } from "lucide-react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import TaskItem from "./TaskItem";
-// import { addTask } from "../actions/add-task";
+import type { TaskCard } from "../types/types";
 
 const mockTasks = ["new", "test", "krzysiem"];
 
-type TaskCard = {
-  title: string;
-  boardId: string;
-  cardId: string;
-};
-
-function TaskCard({ title, boardId, cardId }: TaskCard) {
+function TaskCard({ title, cardId }: TaskCard) {
   const handleTaskSubmit = () => {
-    console.log({ title, boardId, cardId });
-    // addTask({ title, boardId, cardId });
+    console.log({ title });
+    // addTask({ title,  cardId });
   };
 
   return (
@@ -61,7 +55,7 @@ function TaskCard({ title, boardId, cardId }: TaskCard) {
           </Stack>
           <Stack>
             {mockTasks.map((task) => {
-              return <TaskItem key={task} name={task} />;
+              return <TaskItem key={task} name={task} completed />;
             })}
             <InputGroup>
               <Input
