@@ -40,7 +40,7 @@ function BoardTopBar({ title, color }: Board) {
           w={"100%"}
           h={1}
           left={0}
-          top={"68px"}
+          top={{ base: "112px", sm: "68px" }}
         />
         <Spacer />
         <DeleteBoardModal />

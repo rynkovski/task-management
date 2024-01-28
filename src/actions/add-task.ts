@@ -1,13 +1,15 @@
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { TaskCard } from "../types/types";
 import { getAuth } from "firebase/auth";
 
-export async function addTask(
-  { title }: TaskCard,
-  boardId: string,
-  cardId: string
-) {
+type TaskProps = {
+  title: string;
+  completed: boolean;
+  boardId: string;
+  cardId: string;
+};
+
+export async function addTask({ title, boardId, cardId }: TaskProps) {
   const {
     currentUser: { uid },
   }: any = getAuth();
@@ -18,6 +20,7 @@ export async function addTask(
   try {
     await addDoc(tasksColRef, {
       title,
+      completed: false,
     });
   } catch (error) {
     console.error(error);
