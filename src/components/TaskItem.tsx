@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Task } from "../types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateTask } from "../actions/update-task";
+import { deleteTask } from "../actions/delete-task";
 
 function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
   const queryClient = useQueryClient();
@@ -16,18 +17,24 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
+  const { mutateAsync: deleteTaskMutation } = useMutation({
+    mutationFn: deleteTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
   useEffect(() => {
     {
       isCompleted ? setToggleItem("none") : setToggleItem("line-through");
     }
   }, []);
 
+  const data = { title, isCompleted, boardId, cardId, taskId };
   const handleChange = (e: any) => {
     {
       e.target.checked ? setToggleItem("line-through") : setToggleItem("none");
     }
     setIsCompleted(!isCompleted);
-    const data = { title, isCompleted, boardId, cardId, taskId };
 
     updateTaskMutation(data);
   };
@@ -43,6 +50,7 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
           colorScheme="red"
           variant={"ghost"}
           aria-label="delete task"
+          onClick={() => deleteTaskMutation(data)}
         >
           <Trash2 />
         </IconButton>
