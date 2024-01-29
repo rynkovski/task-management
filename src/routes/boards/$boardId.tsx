@@ -30,12 +30,12 @@ function BoardComponent() {
 
   return (
     <>
-      <BoardTopBar title={title} color={color} />
-      <Box as="main" px={12}>
-        <BoardContext.Provider value={boardId}>
+      <BoardContext.Provider value={boardId}>
+        <BoardTopBar title={title} color={color} />
+        <Box as="main" px={12}>
           <TaskSection />
-        </BoardContext.Provider>
-      </Box>
+        </Box>
+      </BoardContext.Provider>
     </>
   );
 }

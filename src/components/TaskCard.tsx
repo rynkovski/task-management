@@ -16,7 +16,7 @@ import type { Task, TaskCard } from "../types/types";
 import { useGetTasks } from "../actions/get-tasks";
 import { useBoardIdContext } from "./context";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addTask } from "../actions/add-task";
+import { addTasks } from "../actions/add-tasks";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
@@ -42,7 +42,7 @@ function TaskCard({ title, cardId }: TaskCard) {
   }, [formState, reset]);
 
   const { mutateAsync: addTaskMutation } = useMutation({
-    mutationFn: addTask,
+    mutationFn: addTasks,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
@@ -112,7 +112,7 @@ function TaskCard({ title, cardId }: TaskCard) {
                   taskId={task.id}
                   boardId={boardId}
                   cardId={cardId}
-                  completed
+                  completed={task.data.completed}
                 />
               );
             })}

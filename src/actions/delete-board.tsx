@@ -12,22 +12,40 @@ import {
   AlertDialogOverlay,
 } from "@chakra-ui/react";
 import { Trash2 } from "lucide-react";
+import { useBoardIdContext } from "../components/context";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 
-async function deleteBoard({ BoardId }: any) {
+type DeleteBoardProps = {
+  boardId: string;
+};
+
+async function deleteBoard({ boardId }: DeleteBoardProps) {
   const {
     currentUser: { uid },
   }: any = getAuth();
 
   try {
-    await deleteDoc(doc(db, `users/${uid}/boards`, `${BoardId}`));
+    await deleteDoc(doc(db, `users/${uid}/boards`, `${boardId}`));
   } catch (error) {
     console.error(error);
   }
 }
 
 export default function DeleteBoardModal() {
+  const boardId = useBoardIdContext();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
+
+  const { mutateAsync: deleteBoardMutation } = useMutation({
+    mutationFn: deleteBoard,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["boards"] });
+    },
+  });
 
   return (
     <>
@@ -56,8 +74,9 @@ export default function DeleteBoardModal() {
               <Button
                 colorScheme="red"
                 onClick={() => {
-                  onClose;
-                  // deleteBoard(id);
+                  onClose();
+                  deleteBoardMutation({ boardId });
+                  navigate({ to: "/boards" });
                 }}
                 ml={3}
               >

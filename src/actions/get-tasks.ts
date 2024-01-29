@@ -28,7 +28,7 @@ export const getTasks = async (boardId: string, cardId: string) => {
 export const useGetTasks = (boardId: string, cardId: string) => {
   const queryFN = () => getTasks(boardId, cardId);
   return useQuery({
-    queryKey: ["tasks"],
+    queryKey: ["tasks", boardId, cardId],
     queryFn: queryFN,
     refetchOnWindowFocus: false,
     retry: false,

@@ -9,7 +9,7 @@ type TaskProps = {
   cardId: string;
 };
 
-export async function addTask({ title, boardId, cardId }: TaskProps) {
+export async function addTasks({ title, boardId, cardId }: TaskProps) {
   const {
     currentUser: { uid },
   }: any = getAuth();

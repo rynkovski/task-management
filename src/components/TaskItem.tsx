@@ -1,6 +1,6 @@
 import { Checkbox, Flex, IconButton, Text } from "@chakra-ui/react";
 import { Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Task } from "../types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateTask } from "../actions/update-task";
@@ -8,7 +8,7 @@ import { updateTask } from "../actions/update-task";
 function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
   const queryClient = useQueryClient();
   const [toggleItem, setToggleItem] = useState("none");
-  const [isCompleted, setIsCompleted] = useState(completed);
+  const [isCompleted, setIsCompleted] = useState(!completed);
 
   const { mutateAsync: updateTaskMutation } = useMutation({
     mutationFn: updateTask,
@@ -16,6 +16,11 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
+  useEffect(() => {
+    {
+      isCompleted ? setToggleItem("none") : setToggleItem("line-through");
+    }
+  }, []);
 
   const handleChange = (e: any) => {
     {
@@ -23,6 +28,7 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
     }
     setIsCompleted(!isCompleted);
     const data = { title, isCompleted, boardId, cardId, taskId };
+
     updateTaskMutation(data);
   };
 
@@ -30,7 +36,7 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
     <>
       <Flex id={taskId} alignItems={"center"} justifyContent={"space-between"}>
         <Flex gap={2}>
-          <Checkbox onChange={handleChange} />
+          <Checkbox defaultChecked={completed} onChange={handleChange} />
           <Text decoration={toggleItem}>{title}</Text>
         </Flex>
         <IconButton
