@@ -9,7 +9,8 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { MoreVertical, Pencil, PlusSquare, Trash2, X } from "lucide-react";
+
+import { MoreVertical, PlusSquare, Trash2, X } from "lucide-react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import TaskItem from "./TaskItem";
 import type { Task, TaskCard } from "../types/types";
@@ -19,6 +20,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addTasks } from "../actions/add-tasks";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { deleteTaskCard } from "../actions/delete-task-card";
+import UpdateTaskCardModal from "./UpdateTaskCardModal";
 
 function TaskCard({ title, cardId }: TaskCard) {
   const boardId = useBoardIdContext();
@@ -47,6 +50,36 @@ function TaskCard({ title, cardId }: TaskCard) {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
   });
+
+  const { mutateAsync: deleteTaskCardMutation } = useMutation({
+    mutationFn: deleteTaskCard,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["task-cards"] });
+    },
+  });
+
+  const TextInput = () => {
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <InputGroup>
+          <Input
+            variant="filled"
+            placeholder="Add task..."
+            {...register("title")}
+          />
+          <InputRightElement>
+            <IconButton
+              colorScheme="blue"
+              aria-label="Search database"
+              icon={<PlusSquare />}
+              type="submit"
+              isLoading={isSubmitting}
+            />
+          </InputRightElement>
+        </InputGroup>
+      </form>
+    );
+  };
 
   async function onSubmit(data: Task) {
     const submitData = { ...data, boardId, cardId };
@@ -90,11 +123,15 @@ function TaskCard({ title, cardId }: TaskCard) {
                     {isOpen ? <X /> : <MoreVertical />}
                   </MenuButton>
                   <MenuList>
-                    <MenuItem alignItems={"center"} gap={2}>
-                      <Pencil />
-                      Edit
-                    </MenuItem>
-                    <MenuItem alignItems={"center"} gap={2}>
+                    <UpdateTaskCardModal cardId={cardId} />
+
+                    <MenuItem
+                      alignItems={"center"}
+                      gap={2}
+                      onClick={() =>
+                        deleteTaskCardMutation({ boardId, cardId })
+                      }
+                    >
                       <Trash2 />
                       Delete
                     </MenuItem>
@@ -116,24 +153,7 @@ function TaskCard({ title, cardId }: TaskCard) {
                 />
               );
             })}
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <InputGroup>
-                <Input
-                  variant="filled"
-                  placeholder="Add task..."
-                  {...register("title")}
-                />
-                <InputRightElement>
-                  <IconButton
-                    colorScheme="blue"
-                    aria-label="Search database"
-                    icon={<PlusSquare />}
-                    type="submit"
-                    isLoading={isSubmitting}
-                  />
-                </InputRightElement>
-              </InputGroup>
-            </form>
+            <TextInput />
           </Stack>
         </Stack>
       </GridItem>
