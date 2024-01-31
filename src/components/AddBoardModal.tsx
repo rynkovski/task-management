@@ -86,7 +86,12 @@ function CreateBoardModal() {
 
   return (
     <>
-      <Button onClick={onOpen} leftIcon={<PlusSquare />} colorScheme="blue">
+      <Button
+        data-testid="create-board-btn"
+        onClick={onOpen}
+        leftIcon={<PlusSquare />}
+        colorScheme="blue"
+      >
         Create board
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>

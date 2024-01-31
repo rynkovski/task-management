@@ -12,9 +12,9 @@ export const Route = new FileRoute('/').createRoute({
 function IndexComponent() {
   return (
     <>
-      <Container p={8} centerContent>
+      <Container data-testid="go-to-login" p={8} centerContent>
         <ChakraLink as={TanstackLink} to="/login">
-          <Button>Go to login</Button>
+          <Button data-testid="go-to-login-btn">Go to login</Button>
         </ChakraLink>
 
         <Outlet />
