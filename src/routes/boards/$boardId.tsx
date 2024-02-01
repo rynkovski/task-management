@@ -6,7 +6,6 @@ import { useGetBoards } from "../../actions/get-boards";
 import { BoardContext } from "../../components/context";
 
 export const Route = new FileRoute('/boards/$boardId').createRoute({
-  // In a loader
   loader: ({ params }) => params.boardId,
   // Or in a component
   component: BoardComponent,

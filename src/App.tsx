@@ -23,9 +23,5 @@ function InnerApp() {
 }
 
 export default function App() {
-  return (
-    // <AuthProvider>
-    <InnerApp />
-    // </AuthProvider>
-  );
+  return <InnerApp />;
 }

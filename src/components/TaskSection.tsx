@@ -22,7 +22,6 @@ function TaskSection() {
             );
           })}
         </>
-
         <GridItem w="xs" mt={10}>
           <AddTaskCardModal />
         </GridItem>
