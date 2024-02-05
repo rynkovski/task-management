@@ -6,6 +6,7 @@ import {
   setAuthorized,
   useAuthorizationStore,
 } from "./stores/useAuthorizationStore";
+import { AuthProvider, useAuth } from "./auth";
 
 function InnerApp() {
   const authorized = getAuth();
@@ -16,12 +17,16 @@ function InnerApp() {
       setAuthorized(false);
     }
   });
-  const auth = useAuthorizationStore((state) => state.authorized);
-
+  // const auth = useAuthorizationStore((state) => state.authorized);
+  const auth = useAuth();
   console.log(auth);
   return <RouterProvider router={router} context={{ auth }} />;
 }
 
 export default function App() {
-  return <InnerApp />;
+  return (
+    <AuthProvider>
+      <InnerApp />
+    </AuthProvider>
+  );
 }

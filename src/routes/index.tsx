@@ -1,4 +1,10 @@
-import { Button, Link as ChakraLink, Container } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  Link as ChakraLink,
+  Container,
+  Heading,
+} from "@chakra-ui/react";
 import {
   Link as TanstackLink,
   FileRoute,
@@ -12,13 +18,30 @@ export const Route = new FileRoute('/').createRoute({
 function IndexComponent() {
   return (
     <>
-      <Container data-testid="go-to-login" p={8} centerContent>
-        <ChakraLink as={TanstackLink} to="/login">
-          <Button data-testid="go-to-login-btn">Go to login</Button>
-        </ChakraLink>
+      <Center
+        h={"100vh"}
+        bgGradient={" linear-gradient(to top, #09203f 0%, #537895 100%);"}
+      >
+        <Container data-testid="go-to-login" p={8} centerContent maxW={"7xl"}>
+          <Heading
+            as={"h1"}
+            size={"4xl"}
+            mb={16}
+            textAlign={"center"}
+            letterSpacing={3}
+            textShadow={"0px 10px 60px black;"}
+          >
+            WELCOME TO ZENBOARD
+          </Heading>
 
-        <Outlet />
-      </Container>
+          <ChakraLink as={TanstackLink} to="/login">
+            <Button data-testid="go-to-login-btn" colorScheme={"blue"}>
+              Go to login
+            </Button>
+          </ChakraLink>
+          <Outlet />
+        </Container>
+      </Center>
     </>
   );
 }
