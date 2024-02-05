@@ -25,7 +25,7 @@ function IndexComponent() {
         <Container data-testid="go-to-login" p={8} centerContent maxW={"7xl"}>
           <Heading
             as={"h1"}
-            size={"4xl"}
+            size={{ base: "2xl", md: "4xl" }}
             mb={16}
             textAlign={"center"}
             letterSpacing={3}

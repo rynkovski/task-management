@@ -8,7 +8,7 @@ import { useGetBoards } from "../../actions/get-boards";
 
 export const Route = new FileRoute('/boards/').createRoute({
   beforeLoad: ({ context, location }) => {
-    if (!context.auth) {
+    if (!context.auth.isAuthenticated) {
       throw redirect({
         to: "/login",
         search: {
