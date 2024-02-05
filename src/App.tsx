@@ -2,10 +2,7 @@ import { RouterProvider } from "@tanstack/react-router";
 import { router } from "./router";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import {
-  setAuthorized,
-  useAuthorizationStore,
-} from "./stores/useAuthorizationStore";
+import { setAuthorized } from "./stores/useAuthorizationStore";
 import { AuthProvider, useAuth } from "./auth";
 
 function InnerApp() {
