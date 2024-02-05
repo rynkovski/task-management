@@ -19,7 +19,6 @@ function BoardsTopBar() {
       shadow="large"
       px={12}
       py={4}
-      sx={"justify-between"}
       flexDirection={{ base: "column", sm: "row" }}
       gap={2}
       bg="blue.800"
