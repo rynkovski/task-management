@@ -28,7 +28,7 @@ import { LoginInput } from "../types/auth.types";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
-export const Route = new FileRoute('/login').createRoute({
+export const Route = new FileRoute("/login").createRoute({
   component: LoginComponent,
 });
 
@@ -84,6 +84,7 @@ function LoginComponent() {
               <FormControl>
                 <FormLabel htmlFor="email">Email address</FormLabel>
                 <Input
+                  defaultValue={"demo@demo.com"}
                   id="email"
                   type="email"
                   placeholder="Enter email"
@@ -99,6 +100,7 @@ function LoginComponent() {
                 <FormLabel mt={2}>Password</FormLabel>
                 <InputGroup size="md">
                   <Input
+                    defaultValue={"demo123"}
                     id="password"
                     pr="4.5rem"
                     type={show ? "text" : "password"}
