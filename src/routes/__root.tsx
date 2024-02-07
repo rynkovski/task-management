@@ -1,9 +1,8 @@
 import { Outlet, rootRouteWithContext } from "@tanstack/react-router";
-import { AuthContext } from "../auth";
 
 interface MyRouterContext {
   // The ReturnType of your useAuth hook or the value of your AuthContext
-  auth: AuthContext;
+  auth: boolean;
 }
 
 export const Route = rootRouteWithContext<MyRouterContext>()({

@@ -2,28 +2,26 @@ import { RouterProvider } from "@tanstack/react-router";
 import { router } from "./router";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { setAuthorized } from "./stores/useAuthorizationStore";
-import { AuthProvider, useAuth } from "./auth";
+import {
+  setAuthorized,
+  useAuthorizationStore,
+} from "./stores/useAuthorizationStore";
 
 function InnerApp() {
   const authorized = getAuth();
   onAuthStateChanged(authorized, (user) => {
     if (user) {
+      console.log(user);
       setAuthorized(true);
     } else {
       setAuthorized(false);
     }
   });
-  // const auth = useAuthorizationStore((state) => state.authorized);
-  const auth = useAuth();
-  console.log(auth);
+  const auth = useAuthorizationStore((state) => state.authorized);
+
   return <RouterProvider router={router} context={{ auth }} />;
 }
 
 export default function App() {
-  return (
-    <AuthProvider>
-      <InnerApp />
-    </AuthProvider>
-  );
+  return <InnerApp />;
 }

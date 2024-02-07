@@ -27,17 +27,18 @@ import { useToast } from "@chakra-ui/react";
 import { LoginInput } from "../types/auth.types";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import { setAuthorized } from "../stores/useAuthorizationStore";
 
-export const Route = new FileRoute("/login").createRoute({
+export const Route = new FileRoute('/login').createRoute({
   component: LoginComponent,
 });
 
 function LoginComponent() {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
-
   const navigate = useNavigate();
   const toast = useToast();
+
   const {
     handleSubmit,
     register,
@@ -49,6 +50,7 @@ function LoginComponent() {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user);
+        setAuthorized(true);
         navigate({ to: "/boards" });
         toast({
           title: "Login succesful",

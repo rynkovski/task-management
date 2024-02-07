@@ -8,7 +8,7 @@ import { useGetBoards } from "../../actions/get-boards";
 
 export const Route = new FileRoute('/boards/').createRoute({
   beforeLoad: ({ context, location }) => {
-    if (!context.auth.isAuthenticated) {
+    if (!context) {
       throw redirect({
         to: "/login",
         search: {
@@ -22,6 +22,8 @@ export const Route = new FileRoute('/boards/').createRoute({
 
 function BoardsIndexComponent() {
   const { data: boardsData, isLoading: isLoadingBoards } = useGetBoards();
+
+  console.log(boardsData);
 
   return (
     <>

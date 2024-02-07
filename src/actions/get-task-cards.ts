@@ -31,6 +31,5 @@ export const useGetTaskCards = (boardId: string) => {
     queryKey: ["task-cards"],
     queryFn: queryFN,
     refetchOnWindowFocus: false,
-    retry: false,
   });
 };

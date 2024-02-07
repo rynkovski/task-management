@@ -29,6 +29,5 @@ export const useGetBoards = () => {
     queryKey: ["boards"],
     queryFn: queryFN,
     refetchOnWindowFocus: false,
-    retry: false,
   });
 };

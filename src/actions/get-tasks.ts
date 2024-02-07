@@ -31,6 +31,5 @@ export const useGetTasks = (boardId: string, cardId: string) => {
     queryKey: ["tasks", boardId, cardId],
     queryFn: queryFN,
     refetchOnWindowFocus: false,
-    retry: false,
   });
 };
