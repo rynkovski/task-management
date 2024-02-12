@@ -3,7 +3,7 @@ import { FileRoute, redirect } from "@tanstack/react-router";
 import BoardTopBar from "../../components/BoardTopBar";
 import TaskSection from "../../components/TaskSection";
 import { useGetBoards } from "../../actions/get-boards";
-import { BoardContext } from "../../components/context";
+import { BoardContext } from "../../hooks/context";
 
 export const Route = new FileRoute('/boards/$boardId').createRoute({
   beforeLoad: ({ context, location }) => {

@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { TaskCard } from "../types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useBoardIdContext } from "./context";
+import { useBoardIdContext } from "../hooks/context";
 import { updateTaskCard } from "../actions/update-task-card";
 
 type UpdateTaskCardProps = {

@@ -15,7 +15,7 @@ import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import TaskItem from "./TaskItem";
 import type { Task, TaskCard } from "../types/types";
 import { useGetTasks } from "../actions/get-tasks";
-import { useBoardIdContext } from "./context";
+import { useBoardIdContext } from "../hooks/context";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addTasks } from "../actions/add-tasks";
 import { useForm } from "react-hook-form";

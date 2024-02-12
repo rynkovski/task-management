@@ -2,7 +2,7 @@ import { Grid, GridItem } from "@chakra-ui/react";
 import TaskCard from "./TaskCard";
 import AddTaskCardModal from "./AddTaskCardModal";
 import { useGetTaskCards } from "../actions/get-task-cards";
-import { useBoardIdContext } from "./context";
+import { useBoardIdContext } from "../hooks/context";
 
 function TaskSection() {
   const boardId = useBoardIdContext();

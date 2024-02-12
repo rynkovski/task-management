@@ -12,7 +12,7 @@ import {
   AlertDialogOverlay,
 } from "@chakra-ui/react";
 import { Trash2 } from "lucide-react";
-import { useBoardIdContext } from "../components/context";
+import { useBoardIdContext } from "../hooks/context";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 

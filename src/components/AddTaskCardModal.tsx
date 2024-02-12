@@ -20,7 +20,7 @@ import { TaskCard } from "../types/types";
 import { addTaskCard } from "../actions/add-task-card";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useBoardIdContext } from "./context";
+import { useBoardIdContext } from "../hooks/context";
 
 function AddTaskCardModal() {
   const queryClient = useQueryClient();
