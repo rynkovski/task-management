@@ -23,8 +23,6 @@ export const Route = new FileRoute('/boards/').createRoute({
 function BoardsIndexComponent() {
   const { data: boardsData, isLoading: isLoadingBoards } = useGetBoards();
 
-  console.log(boardsData);
-
   return (
     <>
       <BoardsTopBar />

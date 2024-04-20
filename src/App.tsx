@@ -11,7 +11,6 @@ function InnerApp() {
   const authorized = getAuth();
   onAuthStateChanged(authorized, (user) => {
     if (user) {
-      console.log(user);
       setAuthorized(true);
     } else {
       setAuthorized(false);
