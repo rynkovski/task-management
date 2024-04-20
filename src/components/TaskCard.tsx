@@ -9,7 +9,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-
+import { Reorder } from "framer-motion";
 import { MoreVertical, PlusSquare, Trash2, X } from "lucide-react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import TaskItem from "./TaskItem";
@@ -19,15 +19,24 @@ import { useBoardIdContext } from "../hooks/context";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addTasks } from "../actions/add-tasks";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { deleteTaskCard } from "../actions/delete-task-card";
 import UpdateTaskCardModal from "./UpdateTaskCardModal";
 
+const listStyle = {
+  listStyleType: "none",
+};
+
 function TaskCard({ title, cardId }: TaskCard) {
+  const [items, setItems] = useState<any>([]);
   const boardId = useBoardIdContext();
   const queryClient = useQueryClient();
 
   const { data: tasksData } = useGetTasks(boardId, cardId);
+
+  useEffect(() => {
+    setItems(tasksData || []);
+  }, [tasksData]);
 
   const toast = useToast();
   const {
@@ -141,7 +150,26 @@ function TaskCard({ title, cardId }: TaskCard) {
             </Menu>
           </Stack>
           <Stack>
-            {tasksData?.map((task) => {
+            <Reorder.Group
+              axis="y"
+              values={items}
+              onReorder={setItems}
+              style={listStyle}
+            >
+              {items?.map((item: any) => (
+                <Reorder.Item key={item.id} value={item}>
+                  <TaskItem
+                    title={item.data.title}
+                    taskId={item.id}
+                    boardId={boardId}
+                    cardId={cardId}
+                    completed={item.data.completed}
+                  />
+                </Reorder.Item>
+              ))}
+            </Reorder.Group>
+
+            {/* {tasksData?.map((task: any) => {
               return (
                 <TaskItem
                   key={task.id}
@@ -152,7 +180,7 @@ function TaskCard({ title, cardId }: TaskCard) {
                   completed={task.data.completed}
                 />
               );
-            })}
+            })} */}
             <TextInput />
           </Stack>
         </Stack>

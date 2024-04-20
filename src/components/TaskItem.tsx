@@ -41,7 +41,12 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
 
   return (
     <>
-      <Flex id={taskId} alignItems={"center"} justifyContent={"space-between"}>
+      <Flex
+        id={taskId}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        sx={{ cursor: "grab", _active: { cursor: "grabbing" } }}
+      >
         <Flex gap={2}>
           <Checkbox defaultChecked={completed} onChange={handleChange} />
           <Text decoration={toggleItem}>{title}</Text>
