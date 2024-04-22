@@ -2,7 +2,6 @@ import {
   Center,
   Flex,
   Spacer,
-  Text,
   Link as ChakraLink,
   Box,
 } from "@chakra-ui/react";
@@ -10,6 +9,7 @@ import { ArrowLeftSquare } from "lucide-react";
 import { Link as TanstackLink } from "@tanstack/react-router";
 import { Board } from "../types/types";
 import DeleteBoardModal from "../actions/delete-board";
+import BoardTitle from "./BoardTitle";
 
 function BoardTopBar({ title, color }: Board) {
   return (
@@ -30,8 +30,7 @@ function BoardTopBar({ title, color }: Board) {
           <ChakraLink as={TanstackLink} to="/boards">
             <ArrowLeftSquare size={28} />
           </ChakraLink>
-
-          <Text as="b">{title}</Text>
+          <BoardTitle title={title} />
         </Center>
         <Box
           position={"absolute"}
