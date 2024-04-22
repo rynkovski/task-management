@@ -45,7 +45,11 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
         id={taskId}
         alignItems={"center"}
         justifyContent={"space-between"}
-        sx={{ cursor: "grab", _active: { cursor: "grabbing" } }}
+        bg={"blue.700"}
+        p={2}
+        pl={4}
+        borderRadius={8}
+        _hover={{ bg: "blue.600", cursor: "grab" }}
       >
         <Flex gap={2}>
           <Checkbox defaultChecked={completed} onChange={handleChange} />

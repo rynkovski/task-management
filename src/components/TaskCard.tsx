@@ -9,7 +9,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { Reorder } from "framer-motion";
+
 import { MoreVertical, PlusSquare, Trash2, X } from "lucide-react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import TaskItem from "./TaskItem";
@@ -23,20 +23,11 @@ import { useEffect, useState } from "react";
 import { deleteTaskCard } from "../actions/delete-task-card";
 import UpdateTaskCardModal from "./UpdateTaskCardModal";
 
-const listStyle = {
-  listStyleType: "none",
-};
-
 function TaskCard({ title, cardId }: TaskCard) {
-  const [items, setItems] = useState<any>([]);
   const boardId = useBoardIdContext();
   const queryClient = useQueryClient();
 
   const { data: tasksData } = useGetTasks(boardId, cardId);
-
-  useEffect(() => {
-    setItems(tasksData || []);
-  }, [tasksData]);
 
   const toast = useToast();
   const {
@@ -67,26 +58,39 @@ function TaskCard({ title, cardId }: TaskCard) {
     },
   });
 
-  const TextInput = () => {
+  const AddTaskItem = () => {
+    const [adding, setAdding] = useState(false);
     return (
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <InputGroup>
-          <Input
-            variant="filled"
-            placeholder="Add task..."
-            {...register("title")}
-          />
-          <InputRightElement>
-            <IconButton
-              colorScheme="blue"
-              aria-label="Search database"
-              icon={<PlusSquare />}
-              type="submit"
-              isLoading={isSubmitting}
-            />
-          </InputRightElement>
-        </InputGroup>
-      </form>
+      <>
+        {adding ? (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <InputGroup>
+              <Input
+                variant="filled"
+                placeholder="Add new task..."
+                {...register("title")}
+              />
+              <InputRightElement>
+                <IconButton
+                  colorScheme="blue"
+                  aria-label="Search database"
+                  icon={<PlusSquare />}
+                  type="submit"
+                  isLoading={isSubmitting}
+                />
+              </InputRightElement>
+            </InputGroup>
+            <Button mt={2} variant={"ghost"} onClick={() => setAdding(false)}>
+              Close
+            </Button>
+          </form>
+        ) : (
+          <Button variant={"ghost"} onClick={() => setAdding(true)} gap={1}>
+            <PlusSquare size={16} />
+            Add task
+          </Button>
+        )}
+      </>
     );
   };
 
@@ -112,23 +116,34 @@ function TaskCard({ title, cardId }: TaskCard) {
         });
       });
   }
-
+  console.log(tasksData);
   return (
-    <>
-      <GridItem w="xs" mt={4}>
-        <Stack p={3} bg="blue.900" borderRadius={"lg"}>
+    <GridItem w="xs" mt={4}>
+      <Stack p={3} bg="blue.900" borderRadius={"lg"} cursor={"grab"}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Text ml={2} as="b">
+            {title}
+          </Text>
           <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
+            direction={"row"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
           >
-            <Text ml={1} as="b">
-              {title}
-            </Text>
+            <Text>({tasksData?.length})</Text>
             <Menu>
               {({ isOpen }) => (
                 <>
-                  <MenuButton isActive={isOpen} as={Button}>
+                  <MenuButton
+                    isActive={isOpen}
+                    as={Button}
+                    size={"sm"}
+                    variant={"ghost"}
+                    p={2}
+                  >
                     {isOpen ? <X /> : <MoreVertical />}
                   </MenuButton>
                   <MenuList>
@@ -149,43 +164,24 @@ function TaskCard({ title, cardId }: TaskCard) {
               )}
             </Menu>
           </Stack>
-          <Stack>
-            <Reorder.Group
-              axis="y"
-              values={items}
-              onReorder={setItems}
-              style={listStyle}
-            >
-              {items?.map((item: any) => (
-                <Reorder.Item key={item.id} value={item}>
-                  <TaskItem
-                    title={item.data.title}
-                    taskId={item.id}
-                    boardId={boardId}
-                    cardId={cardId}
-                    completed={item.data.completed}
-                  />
-                </Reorder.Item>
-              ))}
-            </Reorder.Group>
-
-            {/* {tasksData?.map((task: any) => {
-              return (
-                <TaskItem
-                  key={task.id}
-                  title={task.data.title}
-                  taskId={task.id}
-                  boardId={boardId}
-                  cardId={cardId}
-                  completed={task.data.completed}
-                />
-              );
-            })} */}
-            <TextInput />
-          </Stack>
         </Stack>
-      </GridItem>
-    </>
+        <Stack>
+          {tasksData?.map((task: any) => {
+            return (
+              <TaskItem
+                key={task.id}
+                title={task.data.title}
+                taskId={task.id}
+                boardId={boardId}
+                cardId={cardId}
+                completed={task.data.completed}
+              />
+            );
+          })}
+          <AddTaskItem />
+        </Stack>
+      </Stack>
+    </GridItem>
   );
 }
 

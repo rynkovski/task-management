@@ -4,7 +4,6 @@ import { getAuth } from "firebase/auth";
 
 type TaskCardProps = {
   newTitle: string;
-
   boardId: string;
   cardId: string;
 };
