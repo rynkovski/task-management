@@ -4,6 +4,7 @@ import {
   Link as ChakraLink,
   Container,
   Heading,
+  Text,
 } from "@chakra-ui/react";
 import {
   Link as TanstackLink,
@@ -18,25 +19,39 @@ export const Route = new FileRoute('/').createRoute({
 function IndexComponent() {
   return (
     <>
-      <Center
-        h={"100vh"}
-        bgGradient={" linear-gradient(to top, #09203f 0%, #537895 100%);"}
-      >
-        <Container data-testid="go-to-login" p={8} centerContent maxW={"7xl"}>
+      <Center h={"100vh"}>
+        <Container
+          data-testid="go-to-login"
+          p={8}
+          centerContent
+          maxW={"7xl"}
+          gap={4}
+        >
           <Heading
             as={"h1"}
             size={{ base: "2xl", md: "4xl" }}
-            mb={16}
             textAlign={"center"}
             letterSpacing={3}
-            textShadow={"0px 10px 60px black;"}
           >
-            WELCOME TO ZENBOARD
+            <Text as={"span"} color={"blue.200"}>
+              Find{" "}
+            </Text>{" "}
+            Your Flow with Zenboard
           </Heading>
-
+          <Text>
+            <Text as={"span"} color={"blue.200"}>
+              Harmonize{" "}
+            </Text>
+            Your Workflow,
+            <Text as={"span"} color={"blue.200"}>
+              {" "}
+              Simplify{" "}
+            </Text>
+            Your Success.
+          </Text>
           <ChakraLink as={TanstackLink} to="/login">
             <Button data-testid="go-to-login-btn" colorScheme={"blue"}>
-              Go to login
+              Try for free
             </Button>
           </ChakraLink>
           <Outlet />
