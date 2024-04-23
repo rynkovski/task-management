@@ -1,7 +1,6 @@
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
-
-import { getAuth } from "firebase/auth";
+import { getAuth, User } from "firebase/auth";
 
 type TaskCardProps = {
   title: string;
@@ -9,9 +8,8 @@ type TaskCardProps = {
 };
 
 export async function addTaskCard({ title, boardId }: TaskCardProps) {
-  const {
-    currentUser: { uid },
-  }: any = getAuth();
+  const { currentUser } = getAuth();
+  const uid = (currentUser as User).uid;
   const sectionCardsColRef = collection(
     db,
     `users/${uid}/boards/${boardId}/sectionCards/`

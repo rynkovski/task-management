@@ -1,12 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, User } from "firebase/auth";
 
 export const getTaskCards = async (boardId: string) => {
-  const {
-    currentUser: { uid },
-  }: any = getAuth();
+  const { currentUser } = getAuth();
+  const uid = (currentUser as User).uid;
   const sectionCardsColRef = collection(
     db,
     `users/${uid}/boards/${boardId}/sectionCards/`

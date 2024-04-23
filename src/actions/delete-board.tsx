@@ -1,4 +1,4 @@
-import { getAuth } from "firebase/auth";
+import { getAuth, User } from "firebase/auth";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { Button, useDisclosure } from "@chakra-ui/react";
@@ -21,9 +21,8 @@ type DeleteBoardProps = {
 };
 
 async function deleteBoard({ boardId }: DeleteBoardProps) {
-  const {
-    currentUser: { uid },
-  }: any = getAuth();
+  const { currentUser } = getAuth();
+  const uid = (currentUser as User).uid;
 
   try {
     await deleteDoc(doc(db, `users/${uid}/boards`, `${boardId}`));

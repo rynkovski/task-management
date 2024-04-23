@@ -1,6 +1,6 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { getAuth } from "firebase/auth";
+import { getAuth, User } from "firebase/auth";
 
 type Props = {
   newTitle: string;
@@ -8,9 +8,8 @@ type Props = {
 };
 
 export async function updateBoardTitle({ newTitle, boardId }: Props) {
-  const {
-    currentUser: { uid },
-  }: any = getAuth();
+  const { currentUser } = getAuth();
+  const uid = (currentUser as User).uid;
   const boardsDocRef = doc(db, `users/${uid}/boards/${boardId}/`);
   try {
     await updateDoc(boardsDocRef, {

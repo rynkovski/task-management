@@ -1,7 +1,7 @@
 import { Button, Link as ChakraLink, WrapItem } from "@chakra-ui/react";
 import { Link as TanstackLink } from "@tanstack/react-router";
 
-function BoardCard(props: any) {
+function BoardCard(props: string) {
   return (
     <ChakraLink
       textDecoration="none"

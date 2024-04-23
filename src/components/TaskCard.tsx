@@ -166,7 +166,7 @@ function TaskCard({ title, cardId }: TaskCard) {
           </Stack>
         </Stack>
         <Stack>
-          {tasksData?.map((task: any) => {
+          {tasksData?.map((task) => {
             return (
               <TaskItem
                 key={task.id}

@@ -2,64 +2,64 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as RegisterImport } from './routes/register'
-import { Route as LoginImport } from './routes/login'
-import { Route as IndexImport } from './routes/index'
-import { Route as BoardsIndexImport } from './routes/boards/index'
-import { Route as BoardsBoardIdImport } from './routes/boards/$boardId'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as RegisterImport } from "./routes/register";
+import { Route as LoginImport } from "./routes/login";
+import { Route as IndexImport } from "./routes/index";
+import { Route as BoardsIndexImport } from "./routes/boards/index";
+import { Route as BoardsBoardIdImport } from "./routes/boards/$boardId";
 
 // Create/Update Routes
 
 const RegisterRoute = RegisterImport.update({
-  path: '/register',
+  path: "/register",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const LoginRoute = LoginImport.update({
-  path: '/login',
+  path: "/login",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const IndexRoute = IndexImport.update({
-  path: '/',
+  path: "/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const BoardsIndexRoute = BoardsIndexImport.update({
-  path: '/boards/',
+  path: "/boards/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const BoardsBoardIdRoute = BoardsBoardIdImport.update({
-  path: '/boards/$boardId',
+  path: "/boards/$boardId",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/login': {
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/register': {
-      preLoaderRoute: typeof RegisterImport
-      parentRoute: typeof rootRoute
-    }
-    '/boards/$boardId': {
-      preLoaderRoute: typeof BoardsBoardIdImport
-      parentRoute: typeof rootRoute
-    }
-    '/boards/': {
-      preLoaderRoute: typeof BoardsIndexImport
-      parentRoute: typeof rootRoute
-    }
+    "/": {
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/login": {
+      preLoaderRoute: typeof LoginImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/register": {
+      preLoaderRoute: typeof RegisterImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/boards/$boardId": {
+      preLoaderRoute: typeof BoardsBoardIdImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/boards/": {
+      preLoaderRoute: typeof BoardsIndexImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
@@ -71,4 +71,4 @@ export const routeTree = rootRoute.addChildren([
   RegisterRoute,
   BoardsBoardIdRoute,
   BoardsIndexRoute,
-])
+]);

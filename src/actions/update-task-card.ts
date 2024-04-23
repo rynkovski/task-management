@@ -1,6 +1,6 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { getAuth } from "firebase/auth";
+import { getAuth, User } from "firebase/auth";
 
 type TaskCardProps = {
   newTitle: string;
@@ -13,9 +13,8 @@ export async function updateTaskCard({
   boardId,
   cardId,
 }: TaskCardProps) {
-  const {
-    currentUser: { uid },
-  }: any = getAuth();
+  const { currentUser } = getAuth();
+  const uid = (currentUser as User).uid;
   const taskCardDocRef = doc(
     db,
     `users/${uid}/boards/${boardId}/sectionCards/${cardId}`

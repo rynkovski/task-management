@@ -27,10 +27,10 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
     {
       isCompleted ? setToggleItem("none") : setToggleItem("line-through");
     }
-  }, []);
+  }, [isCompleted]);
 
   const data = { title, isCompleted, boardId, cardId, taskId };
-  const handleChange = (e: any) => {
+  const handleChange = (e: { target: { checked: boolean } }) => {
     {
       e.target.checked ? setToggleItem("line-through") : setToggleItem("none");
     }
