@@ -3,7 +3,9 @@ import {
   Center,
   Link as ChakraLink,
   Container,
+  Flex,
   Heading,
+  Spacer,
   Text,
 } from "@chakra-ui/react";
 import {
@@ -11,6 +13,7 @@ import {
   FileRoute,
   Outlet,
 } from "@tanstack/react-router";
+import { KanbanSquare } from "lucide-react";
 
 export const Route = new FileRoute('/').createRoute({
   component: IndexComponent,
@@ -19,7 +22,31 @@ export const Route = new FileRoute('/').createRoute({
 function IndexComponent() {
   return (
     <>
-      <Center h={"100vh"}>
+      <Flex
+        as="header"
+        shadow="large"
+        px={12}
+        py={8}
+        flexDirection={{ base: "column", sm: "row" }}
+        gap={2}
+        align="center"
+        maxW={"7xl"}
+        mx={"auto"}
+      >
+        <Center gap={2}>
+          <Text as="b">ZenBoard</Text>
+          <KanbanSquare />
+        </Center>
+
+        <Spacer />
+
+        <ChakraLink as={TanstackLink} to="/login">
+          <Button data-testid="go-to-login-btn" colorScheme={"blue"}>
+            Login
+          </Button>
+        </ChakraLink>
+      </Flex>
+      <Center mt={24}>
         <Container
           data-testid="go-to-login"
           p={8}
@@ -29,29 +56,25 @@ function IndexComponent() {
         >
           <Heading
             as={"h1"}
-            size={{ base: "2xl", md: "4xl" }}
+            size={{ base: "2xl", md: "3xl" }}
             textAlign={"center"}
-            letterSpacing={3}
+            letterSpacing={2}
+            fontFamily={"sans-serif"}
+            fontWeight={900}
           >
+            <Text as={"i"}>SLIDE </Text>
+            INTO{" "}
             <Text as={"span"} color={"blue.200"}>
-              Find{" "}
-            </Text>{" "}
-            Your Flow with Zenboard
+              PRODUCTIVITY{" "}
+            </Text>
+            MODE
           </Heading>
           <Text>
-            <Text as={"span"} color={"blue.200"}>
-              Harmonize{" "}
-            </Text>
-            Your Workflow,
-            <Text as={"span"} color={"blue.200"}>
-              {" "}
-              Simplify{" "}
-            </Text>
-            Your Success.
+            Because getting stuff done should feel as easy as Sunday morning.
           </Text>
           <ChakraLink as={TanstackLink} to="/login">
             <Button data-testid="go-to-login-btn" colorScheme={"blue"}>
-              Try for free
+              Try now
             </Button>
           </ChakraLink>
           <Outlet />

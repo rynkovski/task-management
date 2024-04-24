@@ -77,7 +77,9 @@ function LoginComponent() {
         <Card align="center" mt={48} w="md">
           <CardHeader w="100%">
             <Center gap={2}>
-              <Text as="b">ZenBoard</Text>
+              <ChakraLink as={TanstackLink} to="/">
+                <Text as="b">ZenBoard</Text>
+              </ChakraLink>
               <KanbanSquare />
             </Center>
           </CardHeader>
@@ -121,6 +123,7 @@ function LoginComponent() {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
+                <Text mt={4}>You can login using this demo credentials</Text>
                 <Button
                   colorScheme="blue"
                   mt={4}
