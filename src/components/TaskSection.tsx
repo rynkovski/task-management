@@ -1,16 +1,11 @@
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 import TaskCard from "./TaskCard";
-import AddTaskCardModal from "./AddTaskCardModal";
 import { useGetTaskCards } from "../actions/get-task-cards";
 import { useBoardIdContext } from "../hooks/context";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from "react-beautiful-dnd";
+import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
 import { DocumentData } from "firebase/firestore";
+import { StrictModeDroppable } from "./StrictModeDroppable";
 
 type TData = {
   id: string;
@@ -21,49 +16,49 @@ function TaskSection() {
   const boardId = useBoardIdContext();
   const { data } = useGetTaskCards(boardId);
 
-  const [cards, setCards] = useState(data || []);
+  const [cards, updateCards] = useState(data || []);
 
   useEffect(() => {
-    setCards(data as TData[]);
+    updateCards(data as TData[]);
   }, [data]);
 
   const handleOnDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     const newCards = [...cards];
-
     const [reorderedItem] = newCards.splice(result.source.index, 1);
-
     newCards.splice(result.destination.index, 0, reorderedItem);
-    setCards(newCards);
+    updateCards(newCards);
   };
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <Grid templateColumns="repeat(5, 1fr)" gap={6} overflowX={"auto"}>
-        <Droppable droppableId="cards">
-          {(provided) => (
-            <section {...provided.droppableProps} ref={provided.innerRef}>
-              {cards?.map((card, index) => (
-                <Draggable key={card.id} draggableId={card.id} index={index}>
-                  {(provided) => (
-                    <div
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      ref={provided.innerRef}
-                    >
-                      <TaskCard title={card.data.title} cardId={card.id} />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </section>
-          )}
-        </Droppable>
-        <GridItem w="xs" mt={10}>
-          <AddTaskCardModal />
-        </GridItem>
-      </Grid>
+      <StrictModeDroppable droppableId="cards" direction="horizontal">
+        {(provided) => (
+          <Grid
+            mt={4}
+            gap={6}
+            templateColumns="repeat(5,1fr)"
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            overflowX={"auto"}
+          >
+            {cards?.map((card, index) => (
+              <Draggable key={card.id} draggableId={card.id} index={index}>
+                {(provided) => (
+                  <div
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                  >
+                    <TaskCard title={card.data.title} cardId={card.id} />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </Grid>
+        )}
+      </StrictModeDroppable>
     </DragDropContext>
   );
 }

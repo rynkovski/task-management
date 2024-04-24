@@ -3,13 +3,17 @@ import {
   Center,
   Link as ChakraLink,
   Container,
+  Flex,
   Heading,
+  Spacer,
+  Text,
 } from "@chakra-ui/react";
 import {
   Link as TanstackLink,
   FileRoute,
   Outlet,
 } from "@tanstack/react-router";
+import { KanbanSquare } from "lucide-react";
 
 export const Route = new FileRoute('/').createRoute({
   component: IndexComponent,
@@ -18,25 +22,59 @@ export const Route = new FileRoute('/').createRoute({
 function IndexComponent() {
   return (
     <>
-      <Center
-        h={"100vh"}
-        bgGradient={" linear-gradient(to top, #09203f 0%, #537895 100%);"}
+      <Flex
+        as="header"
+        shadow="large"
+        px={12}
+        py={8}
+        flexDirection={{ base: "column", sm: "row" }}
+        gap={2}
+        align="center"
+        maxW={"7xl"}
+        mx={"auto"}
       >
-        <Container data-testid="go-to-login" p={8} centerContent maxW={"7xl"}>
+        <Center gap={2}>
+          <Text as="b">ZenBoard</Text>
+          <KanbanSquare />
+        </Center>
+
+        <Spacer />
+
+        <ChakraLink as={TanstackLink} to="/login">
+          <Button data-testid="go-to-login-btn" colorScheme={"blue"}>
+            Login
+          </Button>
+        </ChakraLink>
+      </Flex>
+      <Center mt={24}>
+        <Container
+          data-testid="go-to-login"
+          p={8}
+          centerContent
+          maxW={"7xl"}
+          gap={4}
+        >
           <Heading
             as={"h1"}
-            size={{ base: "2xl", md: "4xl" }}
-            mb={16}
+            size={{ base: "2xl", md: "3xl" }}
             textAlign={"center"}
-            letterSpacing={3}
-            textShadow={"0px 10px 60px black;"}
+            letterSpacing={2}
+            fontFamily={"sans-serif"}
+            fontWeight={900}
           >
-            WELCOME TO ZENBOARD
+            <Text as={"i"}>SLIDE </Text>
+            INTO{" "}
+            <Text as={"span"} color={"blue.200"}>
+              PRODUCTIVITY{" "}
+            </Text>
+            MODE
           </Heading>
-
+          <Text>
+            Because getting stuff done should feel as easy as Sunday morning.
+          </Text>
           <ChakraLink as={TanstackLink} to="/login">
             <Button data-testid="go-to-login-btn" colorScheme={"blue"}>
-              Go to login
+              Try now
             </Button>
           </ChakraLink>
           <Outlet />

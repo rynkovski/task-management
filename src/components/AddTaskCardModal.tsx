@@ -73,8 +73,8 @@ function AddTaskCardModal() {
   }
   return (
     <>
-      <Button p={3} bg="gray.700" w={100} h={100} onClick={onOpen}>
-        <PlusSquare size={50} />
+      <Button onClick={onOpen} leftIcon={<PlusSquare />} colorScheme="blue">
+        Add card
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

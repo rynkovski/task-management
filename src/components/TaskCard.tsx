@@ -9,7 +9,6 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-
 import { MoreVertical, PlusSquare, Trash2, X } from "lucide-react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import TaskItem from "./TaskItem";
@@ -22,6 +21,8 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { deleteTaskCard } from "../actions/delete-task-card";
 import UpdateTaskCardModal from "./UpdateTaskCardModal";
+import { StrictModeDroppable } from "./StrictModeDroppable";
+import { Draggable } from "react-beautiful-dnd";
 
 function TaskCard({ title, cardId }: TaskCard) {
   const boardId = useBoardIdContext();
@@ -80,12 +81,22 @@ function TaskCard({ title, cardId }: TaskCard) {
                 />
               </InputRightElement>
             </InputGroup>
-            <Button mt={2} variant={"ghost"} onClick={() => setAdding(false)}>
+            <Button
+              mt={2}
+              colorScheme="blue"
+              variant={"ghost"}
+              onClick={() => setAdding(false)}
+            >
               Close
             </Button>
           </form>
         ) : (
-          <Button variant={"ghost"} onClick={() => setAdding(true)} gap={1}>
+          <Button
+            variant={"ghost"}
+            colorScheme="blue"
+            onClick={() => setAdding(true)}
+            gap={1}
+          >
             <PlusSquare size={16} />
             Add task
           </Button>
@@ -116,10 +127,10 @@ function TaskCard({ title, cardId }: TaskCard) {
         });
       });
   }
-  console.log(tasksData);
+
   return (
-    <GridItem w="xs" mt={4}>
-      <Stack p={3} bg="blue.900" borderRadius={"lg"} cursor={"grab"}>
+    <GridItem w="xs">
+      <Stack p={3} bg="blue.900" borderRadius={"lg"}>
         <Stack
           direction="row"
           alignItems="center"
@@ -166,18 +177,33 @@ function TaskCard({ title, cardId }: TaskCard) {
           </Stack>
         </Stack>
         <Stack>
-          {tasksData?.map((task) => {
-            return (
-              <TaskItem
-                key={task.id}
-                title={task.data.title}
-                taskId={task.id}
-                boardId={boardId}
-                cardId={cardId}
-                completed={task.data.completed}
-              />
-            );
-          })}
+          <StrictModeDroppable droppableId={cardId}>
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {tasksData?.map((task, index) => (
+                  <Draggable key={task.id} draggableId={task.id} index={index}>
+                    {(provided) => (
+                      <Stack
+                        minH={"100px"}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        ref={provided.innerRef}
+                      >
+                        <TaskItem
+                          title={task.data.title}
+                          taskId={task.id}
+                          boardId={boardId}
+                          cardId={cardId}
+                          completed={task.data.completed}
+                        />
+                      </Stack>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </StrictModeDroppable>
           <AddTaskItem />
         </Stack>
       </Stack>
