@@ -13,6 +13,7 @@ export type TData = {
 export type TaskCard = {
   cardId: string;
   data: DocumentData;
+  title: string;
 };
 
 export type Task = {
