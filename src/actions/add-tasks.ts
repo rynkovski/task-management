@@ -1,5 +1,4 @@
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
-
 import { db } from "../firebase";
 import { getAuth, User } from "firebase/auth";
 
