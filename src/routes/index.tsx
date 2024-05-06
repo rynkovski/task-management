@@ -46,7 +46,7 @@ function IndexComponent() {
           </Button>
         </ChakraLink>
       </Flex>
-      <Center mt={24}>
+      <Center mt={52}>
         <Container
           data-testid="go-to-login"
           p={8}
