@@ -14,9 +14,9 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
+        <li><a href="#features">Features</a></li>
       </ul>
     </li>
-    <li><a href="#features">Features</a></li>
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
@@ -32,7 +32,7 @@
 
 ![ZenBoard](./public/screenshot.jpeg)
 
-The user interface of the tag browser provided by the StackOverflow API prepared in React.
+Zenboard is a Kanban-style project management tool, where tasks are organized effortlessly into customizable columns, promoting clarity with its minimalist design and intuitive interface.
 
 [Live demo](https://task-management-gamma-eight.vercel.app/)
 
@@ -58,7 +58,7 @@ The user interface of the tag browser provided by the StackOverflow API prepared
 - [x] Add Cards
 - [x] Add Tasks
 - [ ] Drag&Drop
-- [ ] Assign Tasks to specific person
+- [ ] Assign Tasks to specific User
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
