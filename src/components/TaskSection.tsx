@@ -1,65 +1,49 @@
-import { Grid } from "@chakra-ui/react";
+import { Grid, Skeleton, Text } from "@chakra-ui/react";
+import { useBoardIdContext } from "../hooks/context";
 import TaskCard from "./TaskCard";
 import { useGetTaskCards } from "../actions/get-task-cards";
-import { useBoardIdContext } from "../hooks/context";
-import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
-import { useEffect, useState } from "react";
 import { DocumentData } from "firebase/firestore";
-import { StrictModeDroppable } from "./StrictModeDroppable";
 
-type TData = {
-  id: string;
-  data: DocumentData;
-};
+function TaskCards(props: {
+  taskCardData: { id: string; data: DocumentData }[];
+}) {
+  if (!props.taskCardData.length) return <Text>No cards. Add new one!</Text>;
+
+  return (
+    <>
+      {props.taskCardData.map((card: { id: string; data: DocumentData }) => (
+        <TaskCard
+          key={card.id}
+          cardId={card.id}
+          data={card.data}
+          title={card.data.title}
+        />
+      ))}
+    </>
+  );
+}
 
 function TaskSection() {
   const boardId = useBoardIdContext();
-  const { data } = useGetTaskCards(boardId);
 
-  const [cards, updateCards] = useState(data || []);
-
-  useEffect(() => {
-    updateCards(data as TData[]);
-  }, [data]);
-
-  const handleOnDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-    const newCards = [...cards];
-    const [reorderedItem] = newCards.splice(result.source.index, 1);
-    newCards.splice(result.destination.index, 0, reorderedItem);
-    updateCards(newCards);
-  };
+  const { data: taskCardData, isFetching } = useGetTaskCards(boardId);
 
   return (
-    <DragDropContext onDragEnd={handleOnDragEnd}>
-      <StrictModeDroppable droppableId="cards" direction="horizontal">
-        {(provided) => (
-          <Grid
-            mt={4}
-            gap={6}
-            templateColumns="repeat(5,1fr)"
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            overflowX={"auto"}
-          >
-            {cards?.map((card, index) => (
-              <Draggable key={card.id} draggableId={card.id} index={index}>
-                {(provided) => (
-                  <div
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    ref={provided.innerRef}
-                  >
-                    <TaskCard title={card.data.title} cardId={card.id} />
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-          </Grid>
-        )}
-      </StrictModeDroppable>
-    </DragDropContext>
+    <Grid mt={4} gap={6} templateColumns="repeat(5,1fr)" overflowX={"auto"}>
+      {isFetching ? (
+        <>
+          <Skeleton w={300} h={100} />
+          <Skeleton w={300} h={100} />
+          <Skeleton w={300} h={100} />
+          <Skeleton w={300} h={100} />
+          <Skeleton w={300} h={100} />
+        </>
+      ) : (
+        <TaskCards
+          taskCardData={taskCardData as { id: string; data: DocumentData }[]}
+        />
+      )}
+    </Grid>
   );
 }
 

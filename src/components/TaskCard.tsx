@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   GridItem,
   IconButton,
@@ -12,8 +13,7 @@ import {
 import { MoreVertical, PlusSquare, Trash2, X } from "lucide-react";
 import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import TaskItem from "./TaskItem";
-import type { Task, TaskCard } from "../types/types";
-import { useGetTasks } from "../actions/get-tasks";
+import type { Task, TaskCard, TData } from "../types/types";
 import { useBoardIdContext } from "../hooks/context";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addTasks } from "../actions/add-tasks";
@@ -21,14 +21,17 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { deleteTaskCard } from "../actions/delete-task-card";
 import UpdateTaskCardModal from "./UpdateTaskCardModal";
-import { StrictModeDroppable } from "./StrictModeDroppable";
-import { Draggable } from "react-beautiful-dnd";
+import { DocumentData } from "firebase/firestore";
 
-function TaskCard({ title, cardId }: TaskCard) {
+function TaskCard({ cardId, data, title }: TaskCard) {
   const boardId = useBoardIdContext();
   const queryClient = useQueryClient();
 
-  const { data: tasksData } = useGetTasks(boardId, cardId);
+  const [tasksData, setTasksData] = useState<TData>();
+
+  useEffect(() => {
+    setTasksData(data as TData);
+  }, [data]);
 
   const toast = useToast();
   const {
@@ -48,7 +51,7 @@ function TaskCard({ title, cardId }: TaskCard) {
   const { mutateAsync: addTaskMutation } = useMutation({
     mutationFn: addTasks,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["task-cards"] });
     },
   });
 
@@ -144,7 +147,6 @@ function TaskCard({ title, cardId }: TaskCard) {
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Text>({tasksData?.length})</Text>
             <Menu>
               {({ isOpen }) => (
                 <>
@@ -177,33 +179,25 @@ function TaskCard({ title, cardId }: TaskCard) {
           </Stack>
         </Stack>
         <Stack>
-          <StrictModeDroppable droppableId={cardId}>
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {tasksData?.map((task, index) => (
-                  <Draggable key={task.id} draggableId={task.id} index={index}>
-                    {(provided) => (
-                      <Stack
-                        minH={"100px"}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        ref={provided.innerRef}
-                      >
-                        <TaskItem
-                          title={task.data.title}
-                          taskId={task.id}
-                          boardId={boardId}
-                          cardId={cardId}
-                          completed={task.data.completed}
-                        />
-                      </Stack>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </StrictModeDroppable>
+          {tasksData?.tasks === undefined ? (
+            <>
+              <Box minH={"20px"}></Box>
+            </>
+          ) : (
+            <>
+              {tasksData?.tasks.map((task: DocumentData) => (
+                <TaskItem
+                  key={task.id}
+                  title={task.title}
+                  taskId={task.id}
+                  boardId={boardId}
+                  cardId={cardId}
+                  completed={task.completed}
+                />
+              ))}
+            </>
+          )}
+
           <AddTaskItem />
         </Stack>
       </Stack>

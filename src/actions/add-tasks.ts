@@ -1,10 +1,9 @@
-import { collection, addDoc } from "firebase/firestore";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth, User } from "firebase/auth";
 
 type TaskProps = {
   title: string;
-  completed: boolean;
   boardId: string;
   cardId: string;
 };
@@ -12,14 +11,15 @@ type TaskProps = {
 export async function addTasks({ title, boardId, cardId }: TaskProps) {
   const { currentUser } = getAuth();
   const uid = (currentUser as User).uid;
-  const tasksColRef = collection(
+  let uuid = self.crypto.randomUUID();
+  const taskCardDocRef = doc(
     db,
-    `users/${uid}/boards/${boardId}/sectionCards/${cardId}/tasks/`
+    `users/${uid}/boards/${boardId}/sectionCards/${cardId}`
   );
+
   try {
-    await addDoc(tasksColRef, {
-      title,
-      completed: false,
+    await updateDoc(taskCardDocRef, {
+      tasks: arrayUnion({ title: title, id: uuid, completed: false }),
     });
   } catch (error) {
     console.error(error);

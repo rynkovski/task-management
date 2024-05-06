@@ -14,13 +14,13 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
   const { mutateAsync: updateTaskMutation } = useMutation({
     mutationFn: updateTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["task-cards"] });
     },
   });
   const { mutateAsync: deleteTaskMutation } = useMutation({
     mutationFn: deleteTask,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["task-cards"] });
     },
   });
   useEffect(() => {
@@ -35,7 +35,6 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
       e.target.checked ? setToggleItem("line-through") : setToggleItem("none");
     }
     setIsCompleted(!isCompleted);
-
     updateTaskMutation(data);
   };
 
@@ -59,7 +58,7 @@ function TaskItem({ taskId, title, completed, boardId, cardId }: Task) {
           colorScheme="red"
           variant={"ghost"}
           aria-label="delete task"
-          onClick={() => deleteTaskMutation(data)}
+          onClick={() => console.log(data)}
         >
           <Trash2 />
         </IconButton>

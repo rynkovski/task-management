@@ -1,30 +1,98 @@
-# React + TypeScript + Vite
+<br />
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<h3 align="center">ZenBoard</h3>
 
-Currently, two official plugins are available:
+[Live demo](https://task-management-gamma-eight.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+</div>
 
-## Expanding the ESLint configuration
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li><a href="#features">Features</a></li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## About The Project
 
-- Configure the top-level `parserOptions` property like this:
+![ZenBoard](./public/screenshot.jpeg)
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+The user interface of the tag browser provided by the StackOverflow API prepared in React.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+[Live demo](https://task-management-gamma-eight.vercel.app/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Built with
+
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [ChakraUI](https://v2.chakra-ui.com/)
+- [Vite](https://vitejs.dev/)
+- [Tanstack Query](https://tanstack.com/query/latest)
+- [Tanstack Router](https://reactrouter.com/en/main)
+- [Firebase](https://firebase.google.com/)
+- [Cypress](https://www.cypress.io/)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Features
+
+- [x] User Auth
+- [x] Add Boards
+- [x] Add Cards
+- [x] Add Tasks
+- [ ] Drag&Drop
+- [ ] Assign Tasks to specific person
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Getting Started
+
+To get a local copy up and running follow these simple steps.
+
+### Prerequisites
+
+- npm
+  ```sh
+  npm install npm@latest -g
+  ```
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/rynkovski/task-management.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm i
+   ```
+3. Start
+
+   ```sh
+   npm start
+   ```
+
+   <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Contact
+
+[@rynkovski](https://github.com/rynkovski)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>

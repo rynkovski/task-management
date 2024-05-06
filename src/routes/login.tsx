@@ -47,9 +47,7 @@ function LoginComponent() {
 
   async function onSubmit(data: LoginInput) {
     await signInWithEmailAndPassword(auth, data.email, data.password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
+      .then(() => {
         setAuthorized(true);
         navigate({ to: "/boards" });
         toast({

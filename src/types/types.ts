@@ -1,12 +1,19 @@
+import { DocumentData } from "firebase/firestore";
 export type Board = {
   title: string;
   color: string;
   //   createdAt: string;
 };
 
-export type TaskCard = {
+export type TData = {
+  tasks: DocumentData;
   title: string;
+};
+
+export type TaskCard = {
   cardId: string;
+  data: DocumentData;
+  title: string;
 };
 
 export type Task = {
