@@ -1,4 +1,4 @@
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth, User } from "firebase/auth";
 
@@ -15,6 +15,7 @@ export async function updateTask({
   boardId,
   cardId,
   taskId,
+  title,
 }: TaskProps) {
   const { currentUser } = getAuth();
   const uid = (currentUser as User).uid;
@@ -24,7 +25,13 @@ export async function updateTask({
   );
   try {
     await updateDoc(taskCardDocRef, {
-      tasks: arrayUnion({ id: taskId, completed: isCompleted }),
+      tasks: [
+        {
+          title: title,
+          id: taskId,
+          completed: isCompleted,
+        },
+      ],
     });
   } catch (error) {
     console.error(error);
