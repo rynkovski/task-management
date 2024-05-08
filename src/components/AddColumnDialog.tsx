@@ -16,13 +16,13 @@ import {
 import { PlusSquare } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { TaskCard } from "../types/types";
-import { addTaskCard } from "../actions/add-task-card";
+import { Column } from "../types/types";
+import { addColumn } from "../actions/add-column";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useBoardIdContext } from "../hooks/context";
 
-function AddTaskCardModal() {
+function AddColumnDialog() {
   const queryClient = useQueryClient();
   const boardId = useBoardIdContext();
 
@@ -34,7 +34,7 @@ function AddTaskCardModal() {
     reset,
     formState,
     formState: { isSubmitting },
-  } = useForm<TaskCard>();
+  } = useForm<Column>();
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
@@ -42,16 +42,16 @@ function AddTaskCardModal() {
     }
   }, [formState, reset]);
 
-  const { mutateAsync: addTaskCardMutation } = useMutation({
-    mutationFn: addTaskCard,
+  const { mutateAsync: addColumnMutation } = useMutation({
+    mutationFn: addColumn,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["task-cards"] });
+      queryClient.invalidateQueries({ queryKey: ["columns"] });
     },
   });
 
-  async function onSubmit(data: TaskCard) {
-    const submitData = { ...data, boardId };
-    await addTaskCardMutation(submitData)
+  async function onSubmit(data: Column) {
+    const title = data.data.title;
+    await addColumnMutation({ title, boardId })
       .then(() => {
         toast({
           title: "Added succesfully",
@@ -74,21 +74,21 @@ function AddTaskCardModal() {
   return (
     <>
       <Button onClick={onOpen} leftIcon={<PlusSquare />} colorScheme="blue">
-        Add card
+        Add column
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <ModalHeader>Add task card</ModalHeader>
+            <ModalHeader>Create column</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <FormControl isRequired>
-                <FormLabel>Task card title:</FormLabel>
+                <FormLabel>Column title:</FormLabel>
                 <Input
                   id="title"
-                  placeholder="Card title"
-                  {...register("title")}
+                  placeholder="Column title"
+                  {...register("data.title")}
                 />
               </FormControl>
             </ModalBody>
@@ -108,4 +108,4 @@ function AddTaskCardModal() {
   );
 }
 
-export default AddTaskCardModal;
+export default AddColumnDialog;
