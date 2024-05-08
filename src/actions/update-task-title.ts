@@ -1,26 +1,23 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth, User } from "firebase/auth";
+import { Id } from "../types/types";
 
-type TaskCardProps = {
+type Props = {
   newTitle: string;
-  boardId: string;
-  cardId: string;
+  boardId: Id;
+  taskId: Id;
 };
 
-export async function updateTaskCard({
-  newTitle,
-  boardId,
-  cardId,
-}: TaskCardProps) {
+export async function updateTaskTitle({ newTitle, boardId, taskId }: Props) {
   const { currentUser } = getAuth();
   const uid = (currentUser as User).uid;
-  const taskCardDocRef = doc(
+  const boardsDocRef = doc(
     db,
-    `users/${uid}/boards/${boardId}/sectionCards/${cardId}`
+    `users/${uid}/boards/${boardId}/tasks/${taskId}`
   );
   try {
-    await updateDoc(taskCardDocRef, {
+    await updateDoc(boardsDocRef, {
       title: newTitle,
     });
   } catch (error) {
