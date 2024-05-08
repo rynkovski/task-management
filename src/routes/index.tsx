@@ -41,14 +41,12 @@ function IndexComponent() {
         <Spacer />
 
         <ChakraLink as={TanstackLink} to="/login">
-          <Button data-testid="go-to-login-btn" colorScheme={"blue"}>
-            Login
-          </Button>
+          <Button colorScheme={"blue"}>Login</Button>
         </ChakraLink>
       </Flex>
       <Center mt={52}>
         <Container
-          data-testid="go-to-login"
+          data-cy="hero-container"
           p={8}
           centerContent
           maxW={"7xl"}
@@ -73,7 +71,7 @@ function IndexComponent() {
             Because getting stuff done should feel as easy as Sunday morning.
           </Text>
           <ChakraLink as={TanstackLink} to="/login">
-            <Button data-testid="go-to-login-btn" colorScheme={"blue"}>
+            <Button data-cy="go-to-login-btn" colorScheme={"blue"}>
               Try now
             </Button>
           </ChakraLink>

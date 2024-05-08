@@ -37,6 +37,7 @@ function BoardsTopBar() {
           onClick={() => signOut(auth)}
           colorScheme="red"
           variant="outline"
+          data-cy="logout-btn"
         >
           Log out
         </Button>

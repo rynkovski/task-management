@@ -1,41 +1,47 @@
-describe("Landing page", () => {
-  it("renders the button which redirect to login page", () => {
+describe("landing page", () => {
+  beforeEach(() => {
     cy.visit("/");
-    cy.get('[data-testid="go-to-login-btn"]').should("exist");
   });
-  it("redirect to login page", () => {
-    cy.visit("/");
-    cy.get('[data-testid="go-to-login-btn"]').click();
+  it("should render buttons which redirects to login page", () => {
+    cy.get('[data-cy="hero-container"]').should("exist");
+    cy.get('[data-cy="go-to-login-btn"]').should("exist");
+  });
+  it("should redirect the user to login page after clicking a button", () => {
+    cy.get('[data-cy="go-to-login-btn"]').click();
     cy.url().should("include", "/login");
   });
 });
-describe("Login Page", () => {
-  it("login demo user to app", () => {
-    // destructuring assignment of the this.currentUser object
-    // const { email, password } = this.currentUser;
 
+describe("login page", () => {
+  beforeEach(() => {
     cy.visit("/login");
-
-    cy.get("input[name=email]").type("demo@demo.com");
-
-    // {enter} causes the form to submit
-    cy.get("input[name=password]").type(`demo123{enter}`);
-
-    // we should be redirected to /boards
+  });
+  it("should render button which login the user", () => {
+    cy.get('[data-cy="login-btn"]').should("exist");
+  });
+  it("should redirect the user to webiste after clicking a button", () => {
+    cy.get('[data-cy="login-btn"]').click();
     cy.url().should("include", "/boards");
-
-    // our auth cookie should be present
-    // cy.getCookie("your-session-cookie").should("exist");
   });
 });
 
-describe("Boards dashboard", () => {
-  it("renders boards and buttons", () => {
+describe("dashboard page", () => {
+  beforeEach(() => {
     cy.visit("/login");
-    cy.get("input[name=email]").type("demo@demo.com");
-    cy.get("input[name=password]").type(`demo123{enter}`);
-    cy.url().should("include", "/boards");
-    cy.visit("/boards");
-    cy.get('[data-testid="create-board-btn"]').should("exist");
+    cy.get('[data-cy="login-btn"]').click();
+  });
+  it("should render buttons for creating board and logout", () => {
+    cy.get('[data-cy="create-board-btn"]').should("exist");
+    cy.get('[data-cy="logout-btn"]').should("exist");
+  });
+  it("should render modal for creating new board", () => {
+    cy.get('[data-cy="create-board-btn"]').click();
+    cy.get('[data-cy="create-board-modal"]').should("exist");
+  });
+  it("should create new board modal for creating new board", () => {
+    cy.get('[data-cy="create-board-btn"]').click();
+    cy.get('[data-cy="create-board-title"]').type("test board");
+    cy.get(":nth-child(2) > .chakra-radio__control").click();
+    cy.get('[data-cy="create-board"]').click();
   });
 });
