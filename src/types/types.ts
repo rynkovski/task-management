@@ -17,9 +17,14 @@ export type TaskCard = {
 };
 
 export type Task = {
-  taskId: string;
+  id: Id;
+  columnId: Id;
+  content: string;
+};
+
+export type Id = string | number;
+
+export type Column = {
+  id: Id;
   title: string;
-  boardId: string;
-  cardId: string;
-  completed: boolean;
 };
