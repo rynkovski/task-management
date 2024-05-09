@@ -57,7 +57,7 @@ Zenboard is a Kanban-style project management tool, where tasks are organized ef
 - [x] Add Boards
 - [x] Add Cards
 - [x] Add Tasks
-- [ ] Drag&Drop
+- [x] Drag&Drop
 - [ ] Assign Tasks to specific User
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
