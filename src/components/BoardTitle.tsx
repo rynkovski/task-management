@@ -3,16 +3,16 @@ import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useBoardIdContext } from "../hooks/context";
 import { useForm } from "react-hook-form";
-import { TaskCard } from "../types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateBoardTitle } from "../actions/update-board-title";
+import { Board } from "../types/types";
 
 function BoardTitle({ title }: { title: string }) {
   const boardId = useBoardIdContext();
   const queryClient = useQueryClient();
   const [editable, setEditable] = useState(false);
   const toast = useToast();
-  const { handleSubmit, register, reset, formState } = useForm<TaskCard>();
+  const { handleSubmit, register, reset, formState } = useForm<Board>();
 
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
@@ -26,7 +26,7 @@ function BoardTitle({ title }: { title: string }) {
       queryClient.invalidateQueries({ queryKey: ["boards"] });
     },
   });
-  async function onSubmit(data: TaskCard) {
+  async function onSubmit(data: Board) {
     const newTitle = data.title;
     await updateBoardTitleMutation({ newTitle, boardId })
       .then(() => {
