@@ -128,6 +128,7 @@ function LoginComponent() {
                   w="100%"
                   isLoading={isSubmitting}
                   type="submit"
+                  data-cy="login-btn"
                 >
                   Login
                 </Button>

@@ -10,7 +10,7 @@ import { Link as TanstackLink } from "@tanstack/react-router";
 import { Board } from "../types/types";
 import DeleteBoardModal from "../actions/delete-board";
 import BoardTitle from "./BoardTitle";
-import AddTaskCardModal from "./AddTaskCardModal";
+import AddColumnDialog from "./AddColumnDialog";
 
 function BoardTopBar({ title, color }: Board) {
   return (
@@ -42,7 +42,7 @@ function BoardTopBar({ title, color }: Board) {
           top={{ base: "112px", sm: "68px" }}
         />
         <Spacer />
-        <AddTaskCardModal />
+        <AddColumnDialog />
         <DeleteBoardModal />
       </Flex>
     </>

@@ -91,6 +91,7 @@ function CreateBoardModal() {
         onClick={onOpen}
         leftIcon={<PlusSquare />}
         colorScheme="blue"
+        data-cy="create-board-btn"
       >
         Create board
       </Button>
@@ -100,10 +101,11 @@ function CreateBoardModal() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalHeader>Create board</ModalHeader>
             <ModalCloseButton />
-            <ModalBody>
+            <ModalBody data-cy="create-board-modal">
               <FormControl isRequired>
                 <FormLabel>Board title:</FormLabel>
                 <Input
+                  data-cy="create-board-title"
                   id="title"
                   placeholder="Board title"
                   {...register("title")}
@@ -113,7 +115,11 @@ function CreateBoardModal() {
                 <FormLabel as="legend" py={2}>
                   Select color:
                 </FormLabel>
-                <RadioGroup id="color" defaultValue="blue">
+                <RadioGroup
+                  id="color"
+                  defaultValue="blue"
+                  data-cy="create-board-color"
+                >
                   <Stack direction="row" wrap="wrap" spacing="24px">
                     {colors.map((color) => {
                       return (
@@ -135,7 +141,12 @@ function CreateBoardModal() {
               <Button mr={3} onClick={onClose} variant="outline">
                 Close
               </Button>
-              <Button colorScheme="blue" isLoading={isSubmitting} type="submit">
+              <Button
+                colorScheme="blue"
+                isLoading={isSubmitting}
+                type="submit"
+                data-cy="create-board"
+              >
                 Create
               </Button>
             </ModalFooter>

@@ -1,32 +1,19 @@
-import { arrayRemove, doc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth, User } from "firebase/auth";
+import { Id } from "../types/types";
 
-type TaskProps = {
-  title: string;
-  boardId: string;
-  cardId: string;
-  taskId: string;
-  newCompleted: boolean;
+type Props = {
+  boardId: Id;
+  taskId: Id;
 };
 
-export async function deleteTask({
-  title,
-  boardId,
-  cardId,
-  taskId,
-  newCompleted,
-}: TaskProps) {
+export async function deleteTask({ boardId, taskId }: Props) {
   const { currentUser } = getAuth();
   const uid = (currentUser as User).uid;
-  const taskCardDocRef = doc(
-    db,
-    `users/${uid}/boards/${boardId}/sectionCards/${cardId}`
-  );
+  const taskDocRef = doc(db, `users/${uid}/boards/${boardId}/tasks/${taskId}`);
   try {
-    await updateDoc(taskCardDocRef, {
-      tasks: arrayRemove({ title: title, id: taskId, completed: newCompleted }),
-    });
+    await deleteDoc(taskDocRef);
   } catch (error) {
     console.error(error);
   }

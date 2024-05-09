@@ -1,9 +1,9 @@
 import { Box } from "@chakra-ui/react";
 import { FileRoute, redirect } from "@tanstack/react-router";
 import BoardTopBar from "../../components/BoardTopBar";
-import TaskSection from "../../components/TaskSection";
 import { useGetBoards } from "../../actions/get-boards";
 import { BoardContext } from "../../hooks/context";
+import CardsContainer from "../../components/CardsContainer";
 
 export const Route = new FileRoute('/boards/$boardId').createRoute({
   beforeLoad: ({ context, location }) => {
@@ -42,7 +42,7 @@ function BoardComponent() {
       <BoardContext.Provider value={boardId}>
         <BoardTopBar title={title} color={color} />
         <Box as="main" px={12}>
-          <TaskSection />
+          <CardsContainer />
         </Box>
       </BoardContext.Provider>
     </>

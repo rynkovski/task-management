@@ -1,7 +1,6 @@
-import { Button, Flex, Stack } from "@chakra-ui/react";
-import { PlusSquareIcon } from "lucide-react";
-import { useMemo, useState } from "react";
-import { Column, Id, Task } from "../types/types";
+import { Flex, Stack } from "@chakra-ui/react";
+import { useEffect, useMemo, useState } from "react";
+import { Column, Task } from "../types/types";
 import CardColumn from "./CardColumn";
 import {
   DndContext,
@@ -13,49 +12,62 @@ import {
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskBox from "./TaskBox";
-
-function generateId() {
-  return Math.floor(Math.random() * 1000);
-}
-
-function createNewColumn(
-  columns: Column[],
-  setColumns: React.Dispatch<React.SetStateAction<Column[]>>
-) {
-  const columnToAdd: Column = {
-    id: generateId(),
-    title: `Column ${columns.length + 1}`,
-  };
-  setColumns([...columns, columnToAdd]);
-}
+import { useGetColumns } from "../actions/get-columns";
+import { useBoardIdContext } from "../hooks/context";
+import { useGetTasks } from "../actions/get-tasks";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateTask } from "../actions/update-task";
+// import { updateColumns } from "../actions/update-columns";
 
 function CardsContainer() {
+  const boardId = useBoardIdContext();
+
   const [columns, setColumns] = useState<Column[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [activeColumn, setActiveColumn] = useState<Column | null>(null);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
+
+  const queryClient = useQueryClient();
+
+  const { data: columnsData } = useGetColumns(boardId);
+  const { data: tasksData } = useGetTasks(boardId);
+
+  useEffect(() => {
+    setColumns(columnsData as Column[]);
+    setTasks(tasksData as Task[]);
+  }, [columnsData, tasksData]);
+
   const columnsId = useMemo(
     () => columns.map((column) => column.id),
     [columns]
   );
 
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [activeColumn, setActiveColumn] = useState<Column | null>(null);
-  const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const { mutateAsync: updateTaskMutation } = useMutation({
+    mutationFn: updateTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
 
-  function addTask(columnId: Id) {
-    const newTask: Task = {
-      id: generateId(),
-      columnId,
-      content: `Task ${tasks.length + 1}`,
-    };
+  // const { mutateAsync: updateColumnsMutation } = useMutation({
+  //   mutationFn: updateColumns,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["columns"] });
+  //   },
+  // });
 
-    setTasks([...tasks, newTask]);
-  }
+  useEffect(() => {
+    tasks.filter((task) => {
+      const newColumnId = task.data.columnId;
+      const taskId = task.id;
+      updateTaskMutation({ boardId, newColumnId, taskId });
+    });
+  }, [tasks]);
 
-  function deleteColumn(id: Id) {
-    const filteredColumns = columns.filter((column) => column.id !== id);
-    setColumns(filteredColumns);
-    const newTasks = tasks.filter((task) => task.columnId !== id);
-    setTasks(newTasks);
-  }
+  // useEffect(() => {
+  //   const newColumns = columns;
+  //   updateColumnsMutation({ boardId, newColumns });
+  // }, [columns]);
 
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === "Column") {
@@ -108,7 +120,7 @@ function CardsContainer() {
         const activeIndex = tasks.findIndex((task) => task.id === activeId);
         const overIndex = tasks.findIndex((task) => task.id === overId);
 
-        tasks[activeIndex].columnId = tasks[overIndex].columnId;
+        tasks[activeIndex].data.columnId = tasks[overIndex].data.columnId;
 
         return arrayMove(tasks, activeIndex, overIndex);
       });
@@ -120,7 +132,7 @@ function CardsContainer() {
       setTasks((tasks) => {
         const activeIndex = tasks.findIndex((task) => task.id === activeId);
 
-        tasks[activeIndex].columnId = overId;
+        tasks[activeIndex].data.columnId = overId;
 
         return arrayMove(tasks, activeIndex, activeIndex);
       });
@@ -134,31 +146,26 @@ function CardsContainer() {
       onDragOver={onDragOver}
     >
       <Flex mt={6} display={"flex"} gap={4} overflowX={"auto"}>
-        <Stack alignItems={"center"} flexDirection={"row"} gap={4}>
+        <Stack flexDirection={"row"} gap={4}>
           <SortableContext items={columnsId}>
             {columns.map((column) => (
               <CardColumn
                 key={column.id}
                 column={column}
-                deleteColumn={deleteColumn}
-                tasks={tasks.filter((task) => task.columnId === column.id)}
-                addTask={addTask}
+                tasks={tasks.filter((task) => task.data.columnId === column.id)}
               />
             ))}
           </SortableContext>
         </Stack>
-        <Button onClick={() => createNewColumn(columns, setColumns)}>
-          <PlusSquareIcon />
-        </Button>
       </Flex>
       {createPortal(
         <DragOverlay>
           {activeColumn ? (
             <CardColumn
               column={activeColumn}
-              deleteColumn={deleteColumn}
-              tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
-              addTask={addTask}
+              tasks={tasks.filter(
+                (task) => task.data.columnId === activeColumn.id
+              )}
             />
           ) : null}
           {activeTask ? <TaskBox task={activeTask} /> : null}

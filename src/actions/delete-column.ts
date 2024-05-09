@@ -1,21 +1,22 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth, User } from "firebase/auth";
+import { Id } from "../types/types";
 
-type TaskCardProps = {
-  boardId: string;
-  cardId: string;
+type Props = {
+  boardId: Id;
+  columnId: Id;
 };
 
-export async function deleteTaskCard({ boardId, cardId }: TaskCardProps) {
+export async function deleteColumn({ boardId, columnId }: Props) {
   const { currentUser } = getAuth();
   const uid = (currentUser as User).uid;
-  const taskCardDocRef = doc(
+  const columnDocRef = doc(
     db,
-    `users/${uid}/boards/${boardId}/sectionCards/${cardId}`
+    `users/${uid}/boards/${boardId}/columns/${columnId}`
   );
   try {
-    await deleteDoc(taskCardDocRef);
+    await deleteDoc(columnDocRef);
   } catch (error) {
     console.error(error);
   }
